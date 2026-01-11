@@ -33,8 +33,8 @@ class AuthService {
       clientId: kIsWeb || Platform.isIOS ? EnvConfig.googleIosClientId : null,
       
       // Web Client ID is used as serverClientId for token validation
-      // This is required for both iOS and Android
-      serverClientId: EnvConfig.googleWebClientId,
+      // This is required for iOS and Android (NOT for web)
+      serverClientId: kIsWeb ? null : EnvConfig.googleWebClientId,
       
       // Request email and profile scopes
       scopes: [
