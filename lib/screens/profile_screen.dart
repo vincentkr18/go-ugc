@@ -3,6 +3,7 @@ import '../theme/app_theme.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/profile_avatar.dart';
 import '../widgets/personal_info_card.dart';
+import '../widgets/user_auth_details_card.dart';
 import 'login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -114,6 +115,11 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                     // Edit profile info
                   },
                 ),
+                
+                const SizedBox(height: AppTheme.spacingLg),
+                
+                // User Auth Details Card (from API)
+                const UserAuthDetailsCard(),
                 
                 const SizedBox(height: AppTheme.spacingLg),
                 
