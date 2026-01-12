@@ -32,7 +32,7 @@
                 <!-- Replace with your Supabase project URL -->
                 <data
                     android:scheme="https"
-                    android:host="yourproject.supabase.co" />
+                    android:host="waiavurchyemodltjrzn.supabase.co" />
             </intent-filter>
         </activity>
         <meta-data
