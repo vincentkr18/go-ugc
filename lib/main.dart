@@ -4,7 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'config/env_config.dart';
 import 'theme/app_theme.dart';
 import 'screens/login_screen.dart';
-import 'screens/home_screen.dart';
+import 'screens/main_navigation_scaffold.dart';
 
 /// Main entry point of the application
 /// Initializes Supabase and runs the app
@@ -108,8 +108,8 @@ class _AuthGateState extends State<AuthGate> {
         final session = snapshot.hasData ? snapshot.data!.session : null;
         
         if (session != null) {
-          // User is authenticated, show home screen
-          return const HomeScreen();
+          // User is authenticated, show main navigation with bottom nav bar
+          return const MainNavigationScaffold();
         } else {
           // User is not authenticated, show login screen
           return const LoginScreen();
