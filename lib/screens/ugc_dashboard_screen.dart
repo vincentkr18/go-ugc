@@ -197,11 +197,23 @@ class _UgcDashboardScreenState extends State<UgcDashboardScreen> with TickerProv
               ),
             ),
             
-            // Create Video Button
+            // Create Video Button with Illustration
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppTheme.sidePadding),
-                child: _buildCreateVideoButton(),
+                child: Column(
+                  children: [
+                    // Illustration
+                    Image.asset(
+                      'assets/images/illustration.png',
+                      height: 120,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(height: AppTheme.spacingMd),
+                    // Create Button
+                    _buildCreateVideoButton(),
+                  ],
+                ),
               ),
             ),
             
