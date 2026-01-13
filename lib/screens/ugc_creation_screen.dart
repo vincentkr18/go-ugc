@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import '../theme/app_theme.dart';
+import 'template_selection_screen.dart';
+import 'audio_selection_screen.dart';
 
 class UgcCreationScreen extends StatefulWidget {
   final String modelId;
@@ -17,6 +19,8 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
   bool _isGenerating = false;
   double _progress = 0.0;
   Timer? _progressTimer;
+  String? _selectedTemplate;
+  String? _selectedAudio;
 
   @override
   void dispose() {
@@ -110,31 +114,157 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
           ),
         ),
         const SizedBox(height: AppTheme.spacingMd),
-        SizedBox(
-          height: 120,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 4,
-            itemBuilder: (context, index) => _buildTemplateCard(index),
+        
+        // Navigate to template selection screen
+        InkWell(
+          onTap: () async {
+            final result = await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const TemplateSelectionScreen(),
+              ),
+            );
+            if (result != null) {
+              setState(() => _selectedTemplate = result);
+            }
+          },
+          borderRadius: BorderRadius.circular(AppTheme.cardRadius),
+          child: Container(
+            padding: const EdgeInsets.all(AppTheme.cardPadding),
+            decoration: BoxDecoration(
+              color: AppTheme.cardNeutral,
+              borderRadius: BorderRadius.circular(AppTheme.cardRadius),
+              border: Border.all(
+                color: _selectedTemplate != null
+                    ? AppTheme.accentPrimary
+                    : AppTheme.borderLight,
+                width: 2,
+              ),
+              boxShadow: AppTheme.cardShadow,
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(AppTheme.spacingMd),
+                  decoration: BoxDecoration(
+                    color: AppTheme.accentPrimary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(AppTheme.cardRadiusSmall),
+                  ),
+                  child: Icon(
+                    Icons.grid_view_rounded,
+                    color: AppTheme.accentPrimary,
+                  ),
+                ),
+                const SizedBox(width: AppTheme.spacingMd),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _selectedTemplate != null
+                            ? 'Template Selected'
+                            : 'Select Template',
+                        style: GoogleFonts.figtree(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.textPrimary,
+                        ),
+                      ),
+                      Text(
+                        _selectedTemplate != null
+                            ? 'Template ID: $_selectedTemplate'
+                            : 'Browse 100+ templates',
+                        style: GoogleFonts.figtree(
+                          fontSize: 12,
+                          color: AppTheme.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: AppTheme.textSecondary,
+                ),
+              ],
+            ),
           ),
         ),
         
         const SizedBox(height: AppTheme.spacingXl),
         
-        // Audio upload
-        _buildUploadButton(
-          'Upload Audio',
-          Icons.audio_file_rounded,
-          'Select or record audio file',
-        ),
-        
-        const SizedBox(height: AppTheme.spacingLg),
-        
-        // Text to speech option
-        _buildUploadButton(
-          'Text to Speech',
-          Icons.mic_rounded,
-          'Convert text to speech',
+        // Audio upload - navigate to audio selection screen
+        InkWell(
+          onTap: () async {
+            final result = await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const AudioSelectionScreen(),
+              ),
+            );
+            if (result != null) {
+              setState(() => _selectedAudio = result);
+            }
+          },
+          borderRadius: BorderRadius.circular(AppTheme.cardRadius),
+          child: Container(
+            padding: const EdgeInsets.all(AppTheme.cardPadding),
+            decoration: BoxDecoration(
+              color: AppTheme.cardNeutral,
+              borderRadius: BorderRadius.circular(AppTheme.cardRadius),
+              border: Border.all(
+                color: _selectedAudio != null
+                    ? AppTheme.accentPrimary
+                    : AppTheme.borderLight,
+                width: 2,
+              ),
+              boxShadow: AppTheme.cardShadow,
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(AppTheme.spacingMd),
+                  decoration: BoxDecoration(
+                    color: AppTheme.accentPrimary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(AppTheme.cardRadiusSmall),
+                  ),
+                  child: Icon(
+                    Icons.audio_file_rounded,
+                    color: AppTheme.accentPrimary,
+                  ),
+                ),
+                const SizedBox(width: AppTheme.spacingMd),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _selectedAudio != null
+                            ? 'Audio Selected'
+                            : 'Upload Audio or Record Voice',
+                        style: GoogleFonts.figtree(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.textPrimary,
+                        ),
+                      ),
+                      Text(
+                        _selectedAudio != null
+                            ? _selectedAudio!
+                            : 'Upload file or record voice',
+                        style: GoogleFonts.figtree(
+                          fontSize: 12,
+                          color: AppTheme.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: AppTheme.textSecondary,
+                ),
+              ],
+            ),
+          ),
         ),
         
         const SizedBox(height: AppTheme.spacingXl * 2),
@@ -142,7 +272,9 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: _startGeneration,
+            onPressed: (_selectedTemplate != null && _selectedAudio != null)
+                ? _startGeneration
+                : null,
             child: Text(
               'Generate Video',
               style: GoogleFonts.figtree(fontWeight: FontWeight.w600),
@@ -182,10 +314,70 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
         const SizedBox(height: AppTheme.spacingXl),
         
         // Product image upload
-        _buildUploadButton(
-          'Upload Product Image',
-          Icons.image_rounded,
-          'Select product or scene image',
+        InkWell(
+          onTap: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Image file picker would open here',
+                  style: GoogleFonts.figtree(),
+                ),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          },
+          borderRadius: BorderRadius.circular(AppTheme.cardRadius),
+          child: Container(
+            padding: const EdgeInsets.all(AppTheme.cardPadding),
+            decoration: BoxDecoration(
+              color: AppTheme.cardNeutral,
+              borderRadius: BorderRadius.circular(AppTheme.cardRadius),
+              border: Border.all(color: AppTheme.borderLight, width: 2),
+              boxShadow: AppTheme.cardShadow,
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(AppTheme.spacingMd),
+                  decoration: BoxDecoration(
+                    color: AppTheme.accentPrimary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(AppTheme.cardRadiusSmall),
+                  ),
+                  child: Icon(
+                    Icons.image_rounded,
+                    color: AppTheme.accentPrimary,
+                  ),
+                ),
+                const SizedBox(width: AppTheme.spacingMd),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Upload Product Image',
+                        style: GoogleFonts.figtree(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.textPrimary,
+                        ),
+                      ),
+                      Text(
+                        'Select product or scene image',
+                        style: GoogleFonts.figtree(
+                          fontSize: 12,
+                          color: AppTheme.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: AppTheme.textSecondary,
+                ),
+              ],
+            ),
+          ),
         ),
         
         const SizedBox(height: AppTheme.spacingMd),
@@ -231,116 +423,6 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildTemplateCard(int index) {
-    final templates = [
-      'Character A',
-      'Character B',
-      'Character C',
-      'Custom',
-    ];
-    
-    return Container(
-      width: 100,
-      margin: const EdgeInsets.only(right: AppTheme.spacingMd),
-      decoration: BoxDecoration(
-        color: AppTheme.cardNeutral,
-        borderRadius: BorderRadius.circular(AppTheme.cardRadius),
-        boxShadow: AppTheme.cardShadow,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: AppTheme.accentPrimary.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.person_rounded,
-              color: AppTheme.accentPrimary,
-            ),
-          ),
-          const SizedBox(height: AppTheme.spacingSm),
-          Text(
-            templates[index],
-            style: GoogleFonts.figtree(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: AppTheme.textPrimary,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildUploadButton(String title, IconData icon, String subtitle) {
-    return InkWell(
-      onTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'File picker would open here',
-              style: GoogleFonts.figtree(),
-            ),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      },
-      borderRadius: BorderRadius.circular(AppTheme.cardRadius),
-      child: Container(
-        padding: const EdgeInsets.all(AppTheme.cardPadding),
-        decoration: BoxDecoration(
-          color: AppTheme.cardNeutral,
-          borderRadius: BorderRadius.circular(AppTheme.cardRadius),
-          border: Border.all(color: AppTheme.borderLight, width: 2),
-          boxShadow: AppTheme.cardShadow,
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(AppTheme.spacingMd),
-              decoration: BoxDecoration(
-                color: AppTheme.accentPrimary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(AppTheme.cardRadiusSmall),
-              ),
-              child: Icon(icon, color: AppTheme.accentPrimary),
-            ),
-            const SizedBox(width: AppTheme.spacingMd),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.figtree(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: AppTheme.textPrimary,
-                    ),
-                  ),
-                  Text(
-                    subtitle,
-                    style: GoogleFonts.figtree(
-                      fontSize: 12,
-                      color: AppTheme.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Icon(
-              Icons.chevron_right_rounded,
-              color: AppTheme.textSecondary,
-            ),
-          ],
-        ),
-      ),
     );
   }
 

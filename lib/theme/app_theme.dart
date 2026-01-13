@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 /// Calm, editorial, premium, minimal, writing-first aesthetic
 /// Garamond for headers, Figtree for UI
 class AppTheme {
-  // ============ COLORS ============
+  // ============ LIGHT MODE COLORS ============
   
   /// Main Backgrounds
   static const Color backgroundMain = Color(0xFFFAF7F3); // Full screen background
@@ -28,10 +28,30 @@ class AppTheme {
   static const Color statusProcessing = Color(0xFFFFA726); // Orange
   static const Color statusComplete = Color(0xFF51CF66); // Green
   static const Color statusError = Color(0xFFFF6B6B); // Red
+  static const Color statusInProgress = Color(0xFFFF6B6B); // Red
   
   /// UI Elements
   static const Color borderLight = Color(0xFFE0E0E0);
   static const Color shadowColor = Color(0x0D000000); // rgba(0,0,0,0.05)
+
+  // ============ DARK MODE COLORS ============
+  
+  /// Main Backgrounds (Dark)
+  static const Color backgroundMainDark = Color(0xFF1A1A1A); // Full screen background
+  static const Color backgroundSidebarDark = Color(0xFF242424); // Sidebar/drawer
+  
+  /// Card Backgrounds (Dark)
+  static const Color cardNeutralDark = Color(0xFF2C2C2C); // Dark cards
+  static const Color cardYellowDark = Color(0xFF3A3520); // Dark yellow tint
+  static const Color cardHighlightDark = Color(0xFF3D3520); // Hover/tap feedback
+  
+  /// Text Colors (Dark)
+  static const Color textPrimaryDark = Color(0xFFE8E8E8); // Main text
+  static const Color textSecondaryDark = Color(0xFFA0A0A0); // Muted labels
+  
+  /// UI Elements (Dark)
+  static const Color borderLightDark = Color(0xFF404040);
+  static const Color shadowColorDark = Color(0x1A000000); // rgba(0,0,0,0.1)
   
   // ============ DIMENSIONS ============
   
@@ -146,6 +166,7 @@ class AppTheme {
   
   static ThemeData lightTheme(BuildContext context) {
     return ThemeData(
+      brightness: Brightness.light,
       colorScheme: ColorScheme.light(
         primary: accentPrimary,
         secondary: accentPrimary,
@@ -301,6 +322,244 @@ class AppTheme {
         color: accentPrimary,
         linearTrackColor: borderLight,
         circularTrackColor: borderLight,
+      ),
+    );
+  }
+
+  static ThemeData darkTheme(BuildContext context) {
+    return ThemeData(
+      brightness: Brightness.dark,
+      colorScheme: ColorScheme.dark(
+        primary: accentPrimary,
+        secondary: accentPrimary,
+        surface: cardNeutralDark,
+        background: backgroundMainDark,
+        error: statusError,
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onSurface: textPrimaryDark,
+        onBackground: textPrimaryDark,
+      ),
+      scaffoldBackgroundColor: backgroundMainDark,
+      useMaterial3: true,
+      textTheme: _darkTextTheme(context),
+      
+      // App Bar Theme
+      appBarTheme: AppBarTheme(
+        backgroundColor: backgroundMainDark,
+        elevation: 0,
+        centerTitle: false,
+        iconTheme: const IconThemeData(color: accentPrimary),
+        titleTextStyle: GoogleFonts.figtree(
+          color: textPrimaryDark,
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      
+      // Card Theme
+      cardTheme: CardThemeData(
+        color: cardNeutralDark,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(cardRadius),
+        ),
+        margin: EdgeInsets.zero,
+        shadowColor: shadowColorDark,
+      ),
+      
+      // Elevated Button Theme
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: accentPrimary,
+          foregroundColor: Colors.white,
+          minimumSize: const Size(0, buttonHeight),
+          padding: const EdgeInsets.symmetric(horizontal: spacingLg),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(cardRadius),
+          ),
+          elevation: 0,
+          textStyle: GoogleFonts.figtree(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+      
+      // Outlined Button Theme
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: textPrimaryDark,
+          minimumSize: const Size(0, buttonHeight),
+          padding: const EdgeInsets.symmetric(horizontal: spacingLg),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(cardRadius),
+          ),
+          side: const BorderSide(color: borderLightDark, width: 1),
+          textStyle: GoogleFonts.figtree(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+      
+      // Text Button Theme
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: accentPrimary,
+          minimumSize: const Size(0, buttonHeight),
+          padding: const EdgeInsets.symmetric(horizontal: spacingMd),
+          textStyle: GoogleFonts.figtree(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+      
+      // Bottom Navigation Bar Theme
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: backgroundSidebarDark,
+        selectedItemColor: accentPrimary,
+        unselectedItemColor: textSecondaryDark,
+        selectedLabelStyle: GoogleFonts.figtree(
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        ),
+        unselectedLabelStyle: GoogleFonts.figtree(
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+        ),
+        type: BottomNavigationBarType.fixed,
+        elevation: 8,
+      ),
+      
+      // Input Decoration Theme
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: cardNeutralDark,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(cardRadius),
+          borderSide: const BorderSide(color: borderLightDark),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(cardRadius),
+          borderSide: const BorderSide(color: borderLightDark),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(cardRadius),
+          borderSide: const BorderSide(color: accentPrimary, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(cardRadius),
+          borderSide: const BorderSide(color: statusError),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: spacingMd,
+          vertical: spacingMd,
+        ),
+        hintStyle: GoogleFonts.figtree(
+          fontSize: 14,
+          color: textSecondaryDark,
+        ),
+      ),
+      
+      // Icon Theme
+      iconTheme: const IconThemeData(
+        color: textSecondaryDark,
+        size: 24,
+      ),
+      
+      // Floating Action Button
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: accentPrimary,
+        foregroundColor: Colors.white,
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+      
+      // Progress Indicator Theme
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: accentPrimary,
+        linearTrackColor: borderLightDark,
+        circularTrackColor: borderLightDark,
+      ),
+    );
+  }
+
+  static TextTheme _darkTextTheme(BuildContext context) {
+    return TextTheme(
+      // H1 - Garamond, Editorial, Large
+      displayLarge: GoogleFonts.ebGaramond(
+        fontSize: 28,
+        fontWeight: FontWeight.w600,
+        color: textPrimaryDark,
+        height: 1.3,
+        letterSpacing: -0.5,
+      ),
+      displayMedium: GoogleFonts.ebGaramond(
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        color: textPrimaryDark,
+        height: 1.3,
+      ),
+      
+      // H2, H3 - Figtree, Clean
+      headlineLarge: GoogleFonts.figtree(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: textPrimaryDark,
+        height: 1.4,
+      ),
+      headlineMedium: GoogleFonts.figtree(
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        color: textPrimaryDark,
+        height: 1.4,
+      ),
+      headlineSmall: GoogleFonts.figtree(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: textPrimaryDark,
+        height: 1.4,
+      ),
+      
+      // Body - Figtree
+      bodyLarge: GoogleFonts.figtree(
+        fontSize: 16,
+        fontWeight: FontWeight.normal,
+        color: textPrimaryDark,
+        height: 1.5,
+      ),
+      bodyMedium: GoogleFonts.figtree(
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
+        color: textPrimaryDark,
+        height: 1.5,
+      ),
+      bodySmall: GoogleFonts.figtree(
+        fontSize: 12,
+        fontWeight: FontWeight.normal,
+        color: textSecondaryDark,
+        height: 1.5,
+      ),
+      
+      // Labels - Figtree
+      labelLarge: GoogleFonts.figtree(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: textPrimaryDark,
+      ),
+      labelMedium: GoogleFonts.figtree(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: textSecondaryDark,
+      ),
+      labelSmall: GoogleFonts.figtree(
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        color: textSecondaryDark,
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
+import '../theme/theme_provider.dart';
 import '../widgets/user_auth_details_card.dart';
 import '../services/auth_service.dart';
 import 'login_screen.dart';
@@ -56,8 +58,10 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    
     return Scaffold(
-      backgroundColor: AppTheme.backgroundMain,
+      backgroundColor: isDarkMode ? AppTheme.backgroundMainDark : AppTheme.backgroundMain,
       body: SafeArea(
         child: FadeTransition(
           opacity: _fadeAnimation,
@@ -76,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                     style: GoogleFonts.ebGaramond(
                       fontSize: 32,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.textPrimary,
+                      color: isDarkMode ? AppTheme.textPrimaryDark : AppTheme.textPrimary,
                     ),
                   ),
                   
@@ -108,7 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                           style: GoogleFonts.ebGaramond(
                             fontSize: 24,
                             fontWeight: FontWeight.w600,
-                            color: AppTheme.textPrimary,
+                            color: isDarkMode ? AppTheme.textPrimaryDark : AppTheme.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -116,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                           _userEmail,
                           style: GoogleFonts.figtree(
                             fontSize: 14,
-                            color: AppTheme.textSecondary,
+                            color: isDarkMode ? AppTheme.textSecondaryDark : AppTheme.textSecondary,
                           ),
                         ),
                       ],
@@ -132,6 +136,11 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                   
                   // Plan & Upgrade
                   _buildUpgradeCard(context),
+                  
+                  const SizedBox(height: AppTheme.spacingLg),
+                  
+                  // Dark Theme Toggle
+                  _buildThemeToggle(context),
                   
                   const SizedBox(height: AppTheme.spacingLg),
                   
@@ -167,6 +176,61 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             ),
           ),
         ),
+      ),
+    );
+  }
+  
+  Widget _buildThemeToggle(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.isDarkMode;
+    final currentThemeColors = isDarkMode 
+        ? (AppTheme.textPrimaryDark, AppTheme.cardNeutralDark, AppTheme.borderLightDark)
+        : (AppTheme.textPrimary, AppTheme.cardNeutral, AppTheme.borderLight);
+    
+    return Container(
+      padding: const EdgeInsets.all(AppTheme.cardPadding),
+      decoration: BoxDecoration(
+        color: currentThemeColors.$2,
+        borderRadius: BorderRadius.circular(AppTheme.cardRadius),
+        border: Border.all(color: currentThemeColors.$3),
+        boxShadow: AppTheme.cardShadow,
+      ),
+      child: Row(
+        children: [
+          Icon(
+            isDarkMode ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+            color: currentThemeColors.$1,
+            size: 24,
+          ),
+          const SizedBox(width: AppTheme.spacingMd),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Dark Mode',
+                  style: GoogleFonts.figtree(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: currentThemeColors.$1,
+                  ),
+                ),
+                Text(
+                  isDarkMode ? 'Dark theme enabled' : 'Light theme enabled',
+                  style: GoogleFonts.figtree(
+                    fontSize: 12,
+                    color: isDarkMode ? AppTheme.textSecondaryDark : AppTheme.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Switch(
+            value: isDarkMode,
+            onChanged: (_) => themeProvider.toggleTheme(),
+            activeColor: AppTheme.accentPrimary,
+          ),
+        ],
       ),
     );
   }
@@ -239,16 +303,22 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     required VoidCallback onTap,
     bool isDestructive = false,
   }) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDarkMode ? AppTheme.cardNeutralDark : AppTheme.cardNeutral;
+    final borderColor = isDarkMode ? AppTheme.borderLightDark : AppTheme.borderLight;
+    final textColor = isDarkMode ? AppTheme.textPrimaryDark : AppTheme.textPrimary;
+    final secondaryColor = isDarkMode ? AppTheme.textSecondaryDark : AppTheme.textSecondary;
+    
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppTheme.cardRadius),
       child: Container(
         padding: const EdgeInsets.all(AppTheme.cardPadding),
         decoration: BoxDecoration(
-          color: AppTheme.cardNeutral,
+          color: bgColor,
           borderRadius: BorderRadius.circular(AppTheme.cardRadius),
           border: Border.all(
-            color: isDestructive ? AppTheme.statusError.withOpacity(0.3) : AppTheme.borderLight,
+            color: isDestructive ? AppTheme.statusError.withOpacity(0.3) : borderColor,
           ),
           boxShadow: AppTheme.cardShadow,
         ),
@@ -256,7 +326,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           children: [
             Icon(
               icon,
-              color: isDestructive ? AppTheme.statusError : AppTheme.textPrimary,
+              color: isDestructive ? AppTheme.statusError : textColor,
               size: 24,
             ),
             const SizedBox(width: AppTheme.spacingMd),
@@ -266,13 +336,13 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                 style: GoogleFonts.figtree(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  color: isDestructive ? AppTheme.statusError : AppTheme.textPrimary,
+                  color: isDestructive ? AppTheme.statusError : textColor,
                 ),
               ),
             ),
             Icon(
               Icons.chevron_right_rounded,
-              color: AppTheme.textSecondary,
+              color: secondaryColor,
             ),
           ],
         ),

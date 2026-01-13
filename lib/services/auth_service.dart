@@ -28,9 +28,12 @@ class AuthService {
   /// Initialize Google Sign-In with platform-specific configuration
   void initialize() {
     _googleSignIn = GoogleSignIn(
+      // Web uses the web client ID directly
       // iOS requires clientId to be set
       // Android uses SHA-1 fingerprint and doesn't need clientId
-      clientId: kIsWeb || Platform.isIOS ? EnvConfig.googleIosClientId : null,
+      clientId: kIsWeb 
+          ? EnvConfig.googleWebClientId 
+          : (Platform.isIOS ? EnvConfig.googleIosClientId : null),
       
       // Web Client ID is used as serverClientId for token validation
       // This is required for iOS and Android (NOT for web)
