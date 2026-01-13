@@ -86,7 +86,7 @@ Replace `yourproject` with your actual Supabase project ID.
 
 ### Step 5: Update Bundle ID / Package Name (If Different)
 
-If your bundle ID is different from `com.testingapp.flutter_login_app`, update:
+If your bundle ID is different from `com.gougc.admaker`, update:
 
 **iOS:**
 1. Open `ios/Runner.xcodeproj/project.pbxproj`

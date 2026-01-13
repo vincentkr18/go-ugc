@@ -1,4 +1,4 @@
-package com.testingapp.flutter_login_app
+package com.gougc.admaker
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -58,10 +58,9 @@ class _UserAuthDetailsCardState extends State<UserAuthDetailsCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: AppTheme.spacingMd),
       padding: const EdgeInsets.all(AppTheme.cardPadding),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundWhite,
+        color: AppTheme.cardNeutral,
         borderRadius: BorderRadius.circular(AppTheme.cardRadius),
         boxShadow: AppTheme.cardShadow,
       ),
@@ -105,7 +104,7 @@ class _UserAuthDetailsCardState extends State<UserAuthDetailsCard> {
         child: Column(
           children: [
             CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.accentTeal),
+              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.accentPrimary),
             ),
             SizedBox(height: AppTheme.spacingMd),
             Text(
@@ -251,14 +250,14 @@ class _UserAuthDetailsCardState extends State<UserAuthDetailsCard> {
           Container(
             width: 32,
             height: 32,
-            decoration: const BoxDecoration(
-              color: AppTheme.backgroundLight,
+            decoration: BoxDecoration(
+              color: AppTheme.cardYellow,
               shape: BoxShape.circle,
             ),
             child: Icon(
               icon,
               size: 16,
-              color: AppTheme.accentTeal,
+              color: AppTheme.accentPrimary,
             ),
           ),
           const SizedBox(width: 12),
@@ -312,7 +311,7 @@ class _UserAuthDetailsCardState extends State<UserAuthDetailsCard> {
         break;
       default:
         providerIcon = Icons.account_circle;
-        providerColor = AppTheme.accentTeal;
+        providerColor = AppTheme.accentPrimary;
     }
     
     return Container(

@@ -1,25 +1,34 @@
-# 🚀 Final Setup Checklist - Action Required
+# 🚀 Quick Setup Guide - Just 2 Steps!
 
-## ⚠️ IMPORTANT: Complete These Steps Before Running
+## ⚠️ IMPORTANT: This repo is configured for easy cloning!
 
-### Step 1️⃣: Update Environment Configuration (REQUIRED)
+All configurable values are in **ONE file**: `lib/config/env_config.dart`
+
+A setup script will automatically update all platform-specific files for you.
+
+---
+
+## ✨ Setup Steps
+
+### Step 1️⃣: Update Configuration (REQUIRED)
 
 Open: `lib/config/env_config.dart`
 
 Replace these values with your actual credentials:
 
 ```dart
-// 1. Replace with YOUR Supabase project URL
+// 1️⃣ SUPABASE CONFIGURATION
 static const String supabaseUrl = 'https://YOUR_PROJECT.supabase.co';
-
-// 2. Replace with YOUR Supabase anon key  
 static const String supabaseAnonKey = 'YOUR_ANON_KEY';
 
-// 3. Replace with YOUR Google Web Client ID
+// 2️⃣ GOOGLE OAUTH CLIENT IDs  
 static const String googleWebClientId = 'YOUR_WEB_CLIENT_ID.apps.googleusercontent.com';
-
-// 4. Replace with YOUR Google iOS Client ID
 static const String googleIosClientId = 'YOUR_IOS_CLIENT_ID.apps.googleusercontent.com';
+static const String googleAndroidClientId = 'YOUR_ANDROID_CLIENT_ID.apps.googleusercontent.com';
+
+// 3️⃣ APP IDENTIFIERS
+static const String androidPackageName = 'com.example.yourapp';
+static const String iosBundleId = 'com.example.yourapp';
 ```
 
 **Where to find:**
@@ -28,57 +37,41 @@ static const String googleIosClientId = 'YOUR_IOS_CLIENT_ID.apps.googleuserconte
 
 ---
 
-### Step 2️⃣: Configure iOS (REQUIRED for iOS)
+### Step 2️⃣: Run Setup Script (REQUIRED)
 
-Open: `ios/Runner/Info.plist`
+After editing `env_config.dart`, run this command to auto-update all platform files:
 
-Find line ~52 and update the reversed iOS Client ID:
-
-**Your iOS Client ID:** `123456-abc.apps.googleusercontent.com`
-**Reverse it to:** `com.googleusercontent.apps.123456-abc`
-
-Replace in Info.plist:
-```xml
-<string>com.googleusercontent.apps.YOUR_NUMBER_HERE</string>
+```bash
+dart run tool/setup_config.dart
 ```
 
----
+This automatically updates:
+- ✅ `ios/Runner/Info.plist` - Reversed iOS Client ID
+- ✅ `android/app/src/main/AndroidManifest.xml` - Supabase URL
+- ✅ `android/app/build.gradle` - Package name
+- ✅ `ios/Runner.xcodeproj/project.pbxproj` - Bundle ID
 
-### Step 3️⃣: Configure Android (REQUIRED for Android)
-
-Open: `android/app/src/main/AndroidManifest.xml`
-
-Find line ~33 and update your Supabase URL:
-
-```xml
-<data
-    android:scheme="https"
-    android:host="YOUR_PROJECT.supabase.co" />
-```
-
-Replace `YOUR_PROJECT` with your actual Supabase project name.
+**No manual editing of platform files needed!**
 
 ---
 
-### Step 4️⃣: Verify Bundle ID / Package Name
+## 🔧 Additional Setup (First Time Only)
 
-**iOS:**
-Current bundle ID: `com.testingapp.flutter_login_app`
-- File: `ios/Runner.xcodeproj/project.pbxproj` (line 371)
-- **Must match** your iOS OAuth client bundle ID in Google Console
+### Configure Google Cloud Console
 
-**Android:**
-Current package: `com.testingapp.flutter_login_app`
-- File: `android/app/build.gradle` (applicationId)
-- **Must match** your Android OAuth client package name in Google Console
+1. ✅ **Web OAuth client** with redirect URI:
+   - `https://[your-project].supabase.co/auth/v1/callback`
 
-If different, update both files.
+2. ✅ **iOS OAuth client** with:
+   - Bundle ID matching your `iosBundleId` in config
 
----
+3. ✅ **Android OAuth client** with:
+   - Package name matching your `androidPackageName` in config
+   - SHA-1 fingerprint (see below)
 
-### Step 5️⃣: Add SHA-1 to Android OAuth Client (REQUIRED)
+4. ✅ **OAuth consent screen** configured
 
-If you haven't already added your SHA-1 fingerprint:
+### Get Android SHA-1 Fingerprint
 
 ```bash
 cd android
@@ -89,51 +82,38 @@ Copy the SHA-1 and add it to your Android OAuth client in Google Cloud Console.
 
 ---
 
-### Step 6️⃣: Verify Supabase Configuration
+### Configure Supabase
 
 In Supabase Dashboard:
 
-1. ✅ Authentication → Providers → Google is ENABLED
-2. ✅ Google Client ID (Web) is set
-3. ✅ Google Client Secret (Web) is set
-4. ✅ Authorized Client IDs includes Web Client ID
-
----
-
-### Step 7️⃣: Verify Google Cloud Console
-
-1. ✅ Web OAuth client exists with redirect URI:
-   - `https://[project].supabase.co/auth/v1/callback`
-
-2. ✅ iOS OAuth client exists with:
-   - Bundle ID: `com.testingapp.flutter_login_app` (or your custom one)
-
-3. ✅ Android OAuth client exists with:
-   - Package name: `com.testingapp.flutter_login_app` (or your custom one)
-   - SHA-1 fingerprint added
-
-4. ✅ OAuth consent screen configured
+1. ✅ Authentication → Providers → **Google is ENABLED**
+2. ✅ **Google Client ID** (Web) is set
+3. ✅ **Google Client Secret** (Web) is set
+4. ✅ **Authorized Client IDs** includes your Web Client ID
 
 ---
 
 ## ✅ Ready to Run!
 
-Once all steps above are complete:
+Once the setup script completes successfully:
+
+```bash
+flutter run
+```
+
+Or specify a device:
 
 ```bash
 # Run on iOS
 flutter run -d iphone
 
-# Run on Android
+# Run on Android  
 flutter run -d emulator
-
-# Or just
-flutter run
 ```
 
 ---
 
-## 📋 Quick Test
+## 📋 Quick Test Checklist
 
 After launch:
 
@@ -148,47 +128,48 @@ After launch:
 
 ---
 
-## 🐛 If Something Goes Wrong
+## 🐛 Troubleshooting
 
 **"Configuration Error"**
 → Update `lib/config/env_config.dart` with real values
 
-**"Developer Error" (iOS)**
-→ Check reversed iOS Client ID in Info.plist
+**"Failed to update Info.plist"**
+→ Check that `ios/Runner/Info.plist` exists and has CFBundleURLSchemes section
 
-**"Developer Error" (Android)**
-→ Verify SHA-1 is added to Android OAuth client
+**"Developer Error" (iOS/Android)**
+→ Run `dart run tool/setup_config.dart` again to ensure all files are updated
 
 **"Invalid Grant"**
-→ Check Web Client ID is correct in Supabase and code
+→ Verify Web Client ID is correct in both Supabase dashboard and `env_config.dart`
 
-**Account picker doesn't show**
+**"Account picker doesn't show"**
 → Already implemented - we force sign out before sign in
 
-**Can't find files to edit**
-→ All file paths are relative to project root
+---
+
+## 📁 What Changed?
+
+### Before (Manual Setup - Multiple Files to Edit):
+- ❌ `lib/config/env_config.dart` - Credentials
+- ❌ `ios/Runner/Info.plist` - Reversed iOS Client ID (manual calculation)
+- ❌ `android/app/src/main/AndroidManifest.xml` - Supabase URL
+- ❌ `android/app/build.gradle` - Package name
+- ❌ `ios/Runner.xcodeproj/project.pbxproj` - Bundle ID
+
+### After (Automated Setup - ONE File):
+- ✅ `lib/config/env_config.dart` - **ALL configuration in one place**
+- ✅ `dart run tool/setup_config.dart` - **Automatically updates everything**
 
 ---
 
-## 📁 Files You Need to Edit
+## 🎯 For Each New Project Clone
 
-Only these 3 files need your credentials:
+1. Clone this repo
+2. Edit `lib/config/env_config.dart` (update credentials and identifiers)
+3. Run `dart run tool/setup_config.dart`
+4. Run `flutter run`
 
-1. `lib/config/env_config.dart` - All credentials
-2. `ios/Runner/Info.plist` - Reversed iOS Client ID
-3. `android/app/src/main/AndroidManifest.xml` - Supabase URL
-
----
-
-## 🎯 That's It!
-
-After updating the 3 files above with your credentials, run:
-
-```bash
-flutter run
-```
-
-Good luck! 🚀
+That's it! 🚀
 
 ---
 
