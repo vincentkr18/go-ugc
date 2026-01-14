@@ -29,6 +29,12 @@ dependencies:
   file_picker: ^8.0.0
   # Video player for preview
   video_player: ^2.8.2
+  # Audio recording
+  record: ^5.0.4
+  # Path provider for saving files
+  path_provider: ^2.1.2
+  # Permissions
+  permission_handler: ^11.3.0
 
 dev_dependencies:
   flutter_test:

@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import '../theme/app_theme.dart';
 import 'template_selection_screen.dart';
 import 'audio_selection_screen.dart';
+import 'video_player_screen.dart';
 import '../services/video_generation_service.dart';
 import '../models/video_generation_job.dart';
 import '../config/api_config.dart' as api;
@@ -711,14 +712,13 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () {
-                  // Could open video player or share video
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Video URL: $videoUrl',
-                        style: GoogleFonts.figtree(),
+                  Navigator.of(context).pop(); // Close dialog
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => VideoPlayerScreen(
+                        videoUrl: videoUrl,
+                        videoTitle: 'Generated Video',
                       ),
-                      behavior: SnackBarBehavior.floating,
                     ),
                   );
                 },

@@ -66,8 +66,27 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
       if (!mounted) return;
       
       if (user != null) {
-        // Success - navigation is handled by AuthGate in main.dart
+        // Success - navigate to dashboard
         _showSnackBar('Welcome ${user.email}!', isError: false);
+        
+        // Navigate to dashboard after successful sign-in
+        Navigator.of(context).pushReplacement(
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => const UgcDashboardScreen(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: animation,
+                child: ScaleTransition(
+                  scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                    CurvedAnimation(parent: animation, curve: Curves.easeOut),
+                  ),
+                  child: child,
+                ),
+              );
+            },
+            transitionDuration: const Duration(milliseconds: 500),
+          ),
+        );
       } else {
         // User cancelled sign-in
         setState(() => _isLoading = false);

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:record/record.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'dart:io';
 import '../theme/app_theme.dart';
 
 class AudioSelectionScreen extends StatefulWidget {
@@ -14,6 +18,14 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
   String? _selectedOption;
   bool _isRecording = false;
   int _recordingDuration = 0;
+  final AudioRecorder _audioRecorder = AudioRecorder();
+  String? _recordedFilePath;
+
+  @override
+  void dispose() {
+    _audioRecorder.dispose();
+    super.dispose();
+  }
 
   void _handleUpload() async {
     try {
@@ -72,28 +84,153 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
     }
   }
 
-  void _handleRecord() {
-    setState(() {
-      _isRecording = !_isRecording;
-      _recordingDuration = 0;
-    });
-
+  void _handleRecord() async {
     if (_isRecording) {
-      // Simulate recording timer
-      Future.doWhile(() async {
-        await Future.delayed(const Duration(seconds: 1));
-        if (_isRecording && mounted) {
-          setState(() => _recordingDuration++);
-          return true;
-        }
-        return false;
-      });
+      // Stop recording
+      await _stopRecording();
+    } else {
+      // Start recording
+      await _startRecording();
     }
   }
 
-  void _stopAndSave() {
-    setState(() => _isRecording = false);
-    Navigator.of(context).pop('recorded_audio.mp3');
+  Future<void> _startRecording() async {
+    try {
+      // Request microphone permission
+      final status = await Permission.microphone.request();
+      
+      if (!status.isGranted) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Microphone permission is required to record audio',
+                style: GoogleFonts.figtree(),
+              ),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: AppTheme.statusError,
+            ),
+          );
+        }
+        return;
+      }
+
+      // Check if the device can record
+      if (await _audioRecorder.hasPermission()) {
+        // Get temporary directory
+        final directory = await getTemporaryDirectory();
+        final timestamp = DateTime.now().millisecondsSinceEpoch;
+        final filePath = '${directory.path}/recorded_audio_$timestamp.m4a';
+        
+        // Start recording
+        await _audioRecorder.start(
+          const RecordConfig(
+            encoder: AudioEncoder.aacLc,
+            bitRate: 128000,
+            sampleRate: 44100,
+          ),
+          path: filePath,
+        );
+
+        setState(() {
+          _isRecording = true;
+          _recordingDuration = 0;
+          _recordedFilePath = filePath;
+        });
+
+        // Start timer
+        Future.doWhile(() async {
+          await Future.delayed(const Duration(seconds: 1));
+          if (_isRecording && mounted) {
+            setState(() => _recordingDuration++);
+            return true;
+          }
+          return false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Error starting recording: $e',
+              style: GoogleFonts.figtree(),
+            ),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: AppTheme.statusError,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _stopRecording() async {
+    try {
+      final path = await _audioRecorder.stop();
+      
+      setState(() {
+        _isRecording = false;
+      });
+      
+      if (path != null && mounted) {
+        _recordedFilePath = path;
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Error stopping recording: $e',
+              style: GoogleFonts.figtree(),
+            ),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: AppTheme.statusError,
+          ),
+        );
+      }
+    }
+  }
+
+  void _stopAndSave() async {
+    if (_isRecording) {
+      await _stopRecording();
+    }
+    
+    if (_recordedFilePath != null && _recordedFilePath!.isNotEmpty) {
+      // Verify the file exists
+      final file = File(_recordedFilePath!);
+      if (await file.exists()) {
+        if (mounted) {
+          Navigator.of(context).pop(_recordedFilePath);
+        }
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Error: Recorded file not found',
+                style: GoogleFonts.figtree(),
+              ),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: AppTheme.statusError,
+            ),
+          );
+        }
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'No audio recorded',
+              style: GoogleFonts.figtree(),
+            ),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: AppTheme.statusError,
+          ),
+        );
+      }
+    }
   }
 
   String _formatDuration(int seconds) {

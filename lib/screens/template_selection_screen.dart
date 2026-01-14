@@ -22,6 +22,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
   String _selectedFilter = 'All';
   int? _selectedTemplateId;
   int? _hoveredTemplateId;
+  int? _longPressedTemplateId;
   final TextEditingController _searchController = TextEditingController();
 
   // Extract unique tags from templates for filters
@@ -347,6 +348,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
 
   Widget _buildTemplateCard(VideoTemplate template, bool isSelected) {
     final isHovered = template.id == _hoveredTemplateId;
+    final isLongPressed = template.id == _longPressedTemplateId;
     
     return MouseRegion(
       onEnter: (_) => setState(() => _hoveredTemplateId = template.id),
@@ -355,7 +357,19 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
         onTap: () {
           setState(() => _selectedTemplateId = template.id);
         },
-        child: Column(
+        onLongPressStart: (_) {
+          // For mobile: show video preview modal on long press
+          setState(() => _longPressedTemplateId = template.id);
+          _showVideoPreviewModal(template);
+        },
+        onLongPressEnd: (_) {
+          // Clean up when long press ends
+          setState(() => _longPressedTemplateId = null);
+        },
+        child: AnimatedScale(
+          scale: isLongPressed ? 0.95 : 1.0,
+          duration: const Duration(milliseconds: 150),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Thumbnail or Video Preview
@@ -480,6 +494,202 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
                   );
                 }).toList(),
               ),
+          ],
+        ),
+          ),
+      ),
+    );
+  }
+
+  void _showVideoPreviewModal(VideoTemplate template) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.black87,
+      builder: (context) => _VideoPreviewModal(
+        template: template,
+        onDismiss: () {
+          Navigator.of(context).pop();
+          setState(() => _longPressedTemplateId = null);
+        },
+      ),
+    );
+  }
+}
+
+/// Full-screen video preview modal for long-press
+class _VideoPreviewModal extends StatefulWidget {
+  final VideoTemplate template;
+  final VoidCallback onDismiss;
+
+  const _VideoPreviewModal({
+    required this.template,
+    required this.onDismiss,
+  });
+
+  @override
+  State<_VideoPreviewModal> createState() => _VideoPreviewModalState();
+}
+
+class _VideoPreviewModalState extends State<_VideoPreviewModal> {
+  late VideoPlayerController _controller;
+  bool _isInitialized = false;
+  bool _hasError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeVideo();
+  }
+
+  Future<void> _initializeVideo() async {
+    try {
+      _controller = VideoPlayerController.networkUrl(
+        Uri.parse(widget.template.previewUrl),
+      );
+
+      await _controller.initialize();
+
+      if (mounted) {
+        setState(() => _isInitialized = true);
+        _controller.setLooping(true);
+        _controller.setVolume(0.3); // Low volume for preview
+        _controller.play();
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _hasError = true);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: widget.onDismiss,
+      child: Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Template title
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.black54,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                widget.template.title,
+                style: GoogleFonts.figtree(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(height: 16),
+            
+            // Video preview
+            Container(
+              constraints: const BoxConstraints(
+                maxWidth: 400,
+                maxHeight: 700,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 20,
+                    spreadRadius: 5,
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: AspectRatio(
+                  aspectRatio: 9 / 16,
+                  child: _hasError
+                      ? Container(
+                          color: AppTheme.cardNeutral,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.error_outline_rounded,
+                                size: 48,
+                                color: AppTheme.statusError,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'Failed to load preview',
+                                style: GoogleFonts.figtree(
+                                  fontSize: 14,
+                                  color: AppTheme.textSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : !_isInitialized
+                          ? Container(
+                              color: AppTheme.cardNeutral,
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )
+                          : FittedBox(
+                              fit: BoxFit.cover,
+                              child: SizedBox(
+                                width: _controller.value.size.width,
+                                height: _controller.value.size.height,
+                                child: VideoPlayer(_controller),
+                              ),
+                            ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            
+            // Instructions
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.black54,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.touch_app_rounded,
+                    color: Colors.white70,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Tap anywhere to close',
+                    style: GoogleFonts.figtree(
+                      fontSize: 14,
+                      color: Colors.white70,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

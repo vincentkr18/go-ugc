@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_theme.dart';
 import '../services/auth_service.dart';
+import '../services/template_service.dart';
+import '../models/video_template.dart';
 import 'profile_screen.dart';
 import 'model_selection_screen.dart';
 import 'video_detail_screen.dart';
@@ -11,6 +13,7 @@ class VideoItem {
   final String id;
   final String title;
   final String thumbnailUrl;
+  final String? videoUrl; // Cloudinary video URL
   final VideoStatus status;
   final int? progress; // 0-100 for in-progress videos
   final DateTime createdAt;
@@ -19,6 +22,7 @@ class VideoItem {
     required this.id,
     required this.title,
     required this.thumbnailUrl,
+    this.videoUrl,
     required this.status,
     this.progress,
     required this.createdAt,
@@ -38,32 +42,12 @@ class _UgcDashboardScreenState extends State<UgcDashboardScreen> with TickerProv
   int _selectedIndex = 0;
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
+  final TemplateService _templateService = TemplateService();
+  List<VideoTemplate> _randomTemplates = [];
+  bool _isLoadingTemplates = false;
   
-  // Mock video data
-  final List<VideoItem> _videos = [
-    VideoItem(
-      id: '1',
-      title: 'Product Demo - Sneakers',
-      thumbnailUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400',
-      status: VideoStatus.complete,
-      createdAt: DateTime.now().subtract(const Duration(days: 2)),
-    ),
-    VideoItem(
-      id: '2',
-      title: 'Lip Sync - Music Video',
-      thumbnailUrl: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400',
-      status: VideoStatus.generating,
-      progress: 65,
-      createdAt: DateTime.now().subtract(const Duration(hours: 1)),
-    ),
-    VideoItem(
-      id: '3',
-      title: 'Character Animation',
-      thumbnailUrl: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=400',
-      status: VideoStatus.complete,
-      createdAt: DateTime.now().subtract(const Duration(days: 5)),
-    ),
-  ];
+  // Mock video data - will be populated with random templates
+  List<VideoItem> _videos = [];
 
   @override
   void initState() {
@@ -76,6 +60,53 @@ class _UgcDashboardScreenState extends State<UgcDashboardScreen> with TickerProv
       CurvedAnimation(parent: _fadeController, curve: Curves.easeOut),
     );
     _fadeController.forward();
+    _loadRandomTemplates();
+  }
+
+  Future<void> _loadRandomTemplates() async {
+    setState(() => _isLoadingTemplates = true);
+    
+    try {
+      final templates = await _templateService.fetchTemplatePage(limit: 50);
+      
+      // Shuffle and take 3 random templates
+      templates.shuffle();
+      final randomTemplates = templates.take(3).toList();
+      
+      // Convert templates to VideoItems
+      final videos = randomTemplates.asMap().entries.map((entry) {
+        final index = entry.key;
+        final template = entry.value;
+        return VideoItem(
+          id: template.id.toString(),
+          title: template.title,
+          thumbnailUrl: template.thumbnailUrl,
+          videoUrl: template.previewUrl,
+          status: VideoStatus.complete,
+          createdAt: DateTime.now().subtract(Duration(days: index + 1)),
+        );
+      }).toList();
+      
+      setState(() {
+        _randomTemplates = randomTemplates;
+        _videos = videos;
+        _isLoadingTemplates = false;
+      });
+    } catch (e) {
+      setState(() => _isLoadingTemplates = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Failed to load templates: $e',
+              style: GoogleFonts.figtree(),
+            ),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: AppTheme.statusError,
+          ),
+        );
+      }
+    }
   }
 
   @override

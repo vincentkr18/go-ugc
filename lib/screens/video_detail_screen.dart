@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_theme.dart';
 import 'ugc_dashboard_screen.dart';
+import 'video_player_screen.dart';
 
 class VideoDetailScreen extends StatelessWidget {
   final VideoItem video;
@@ -101,16 +102,27 @@ class VideoDetailScreen extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Playing video...',
-                              style: GoogleFonts.figtree(),
+                        if (video.videoUrl != null) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => VideoPlayerScreen(
+                                videoUrl: video.videoUrl!,
+                                videoTitle: video.title,
+                              ),
                             ),
-                            behavior: SnackBarBehavior.floating,
-                            backgroundColor: AppTheme.accentPrimary,
-                          ),
-                        );
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Video URL not available',
+                                style: GoogleFonts.figtree(),
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                              backgroundColor: AppTheme.statusError,
+                            ),
+                          );
+                        }
                       },
                       icon: const Icon(Icons.play_arrow_rounded),
                       label: Text('Play', style: GoogleFonts.figtree(fontWeight: FontWeight.w500)),
