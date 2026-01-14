@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import '../theme/app_theme.dart';
 import 'template_selection_screen.dart';
 import 'audio_selection_screen.dart';
+import '../services/video_generation_service.dart';
+import '../models/video_generation_job.dart';
+import '../config/api_config.dart' as api;
 
 class UgcCreationScreen extends StatefulWidget {
   final String modelId;
@@ -16,11 +21,16 @@ class UgcCreationScreen extends StatefulWidget {
 
 class _UgcCreationScreenState extends State<UgcCreationScreen> {
   final TextEditingController _promptController = TextEditingController();
+  final VideoGenerationService _videoService = VideoGenerationService();
   bool _isGenerating = false;
   double _progress = 0.0;
   Timer? _progressTimer;
   String? _selectedTemplate;
   String? _selectedAudio;
+  File? _selectedAudioFile;
+  File? _selectedProductImage;
+  VideoGenerationJob? _currentJob;
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -201,7 +211,13 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
               ),
             );
             if (result != null) {
-              setState(() => _selectedAudio = result);
+              setState(() {
+                _selectedAudio = result;
+                // Convert string path to File object
+                if (result is String && result.isNotEmpty) {
+                  _selectedAudioFile = File(result);
+                }
+              });
             }
           },
           borderRadius: BorderRadius.circular(AppTheme.cardRadius),
@@ -315,16 +331,49 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
         
         // Product image upload
         InkWell(
-          onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'Image file picker would open here',
-                  style: GoogleFonts.figtree(),
-                ),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
+          onTap: () async {
+            try {
+              // Use file picker to select image
+              final result = await FilePicker.platform.pickFiles(
+                type: FileType.image,
+                allowMultiple: false,
+              );
+
+              if (result != null && result.files.isNotEmpty) {
+                final file = result.files.first;
+                if (file.path != null) {
+                  setState(() {
+                    _selectedProductImage = File(file.path!);
+                  });
+                  
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Image selected: ${file.name}',
+                          style: GoogleFonts.figtree(),
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                        backgroundColor: AppTheme.statusComplete,
+                      ),
+                    );
+                  }
+                }
+              }
+            } catch (e) {
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Error selecting image: $e',
+                      style: GoogleFonts.figtree(),
+                    ),
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: AppTheme.statusError,
+                  ),
+                );
+              }
+            }
           },
           borderRadius: BorderRadius.circular(AppTheme.cardRadius),
           child: Container(
@@ -354,7 +403,9 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Upload Product Image',
+                        _selectedProductImage != null
+                            ? 'Image Selected'
+                            : 'Upload Product Image',
                         style: GoogleFonts.figtree(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -362,7 +413,9 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                         ),
                       ),
                       Text(
-                        'Select product or scene image',
+                        _selectedProductImage != null
+                            ? _selectedProductImage!.path.split('/').last
+                            : 'Select product or scene image',
                         style: GoogleFonts.figtree(
                           fontSize: 12,
                           color: AppTheme.textSecondary,
@@ -504,10 +557,80 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
     return '${remaining}s remaining';
   }
 
-  void _startGeneration() {
-    setState(() => _isGenerating = true);
+  void _startGeneration() async {
+    setState(() {
+      _isGenerating = true;
+      _progress = 0.0;
+      _errorMessage = null;
+    });
     
-    // Simulate progress
+    try {
+      VideoGenerationJob job;
+      
+      // Call appropriate API based on model
+      if (widget.modelId == 'lip_sync') {
+        // Lip sync requires template and audio
+        if (_selectedTemplate == null || _selectedAudioFile == null) {
+          throw Exception('Template and audio are required for Lip Sync');
+        }
+        
+        final templateId = int.tryParse(_selectedTemplate!) ?? 1;
+        job = await _videoService.generateLipSyncWithAudio(
+          aspectRatio: api.AspectRatio.portrait_9_16,
+          videoTemplateId: templateId,
+          audioFile: _selectedAudioFile!,
+        );
+      } else if (widget.modelId == 'sora2') {
+        job = await _videoService.generateSora2Video(
+          aspectRatio: api.AspectRatio.portrait_9_16,
+          prompt: _promptController.text,
+          productImage: _selectedProductImage,
+        );
+      } else if (widget.modelId == 'kling') {
+        job = await _videoService.generateKlingVideo(
+          aspectRatio: api.AspectRatio.portrait_9_16,
+          prompt: _promptController.text,
+          productImage: _selectedProductImage,
+        );
+      } else if (widget.modelId == 'veo3') {
+        job = await _videoService.generateVeo3Video(
+          aspectRatio: api.AspectRatio.portrait_9_16,
+          prompt: _promptController.text,
+          productImage: _selectedProductImage,
+        );
+      } else {
+        throw Exception('Unknown model: ${widget.modelId}');
+      }
+      
+      setState(() {
+        _currentJob = job;
+      });
+      
+      // Simulate progress animation
+      _startProgressAnimation();
+    } catch (e) {
+      setState(() {
+        _isGenerating = false;
+        _errorMessage = e.toString();
+      });
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Error: ${e.toString()}',
+              style: GoogleFonts.figtree(),
+            ),
+            backgroundColor: AppTheme.statusError,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
+  }
+  
+  void _startProgressAnimation() {
+    // Animate progress to completion
     _progressTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       setState(() {
         _progress += 0.01;
@@ -520,6 +643,9 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
   }
 
   void _showCompletionDialog() {
+    final jobId = _currentJob?.jobId ?? 'unknown';
+    final videoUrl = _currentJob?.videoGeneratedPath;
+    
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -560,9 +686,49 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                 color: AppTheme.textSecondary,
               ),
             ),
+            if (videoUrl != null) ...[
+              const SizedBox(height: AppTheme.spacingMd),
+              Container(
+                padding: const EdgeInsets.all(AppTheme.spacingSm),
+                decoration: BoxDecoration(
+                  color: AppTheme.cardNeutral,
+                  borderRadius: BorderRadius.circular(AppTheme.cardRadiusSmall),
+                ),
+                child: Text(
+                  'Job ID: $jobId',
+                  style: GoogleFonts.figtree(
+                    fontSize: 11,
+                    color: AppTheme.textSecondary,
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
         actions: [
+          if (videoUrl != null)
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () {
+                  // Could open video player or share video
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Video URL: $videoUrl',
+                        style: GoogleFonts.figtree(),
+                      ),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
+                child: Text(
+                  'View Video',
+                  style: GoogleFonts.figtree(fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+          const SizedBox(height: AppTheme.spacingSm),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(

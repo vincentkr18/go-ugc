@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:video_player/video_player.dart';
 import '../theme/app_theme.dart';
+import '../services/template_service.dart';
+import '../models/video_template.dart';
 
 class TemplateSelectionScreen extends StatefulWidget {
   const TemplateSelectionScreen({super.key});
@@ -10,38 +14,80 @@ class TemplateSelectionScreen extends StatefulWidget {
 }
 
 class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
+  final TemplateService _templateService = TemplateService();
+  List<VideoTemplate> _allTemplates = [];
+  List<VideoTemplate> _filteredTemplates = [];
+  bool _isLoading = true;
+  String? _errorMessage;
   String _selectedFilter = 'All';
-  String? _selectedTemplate;
+  int? _selectedTemplateId;
+  int? _hoveredTemplateId;
+  final TextEditingController _searchController = TextEditingController();
 
-  final List<String> _filters = [
-    'All',
-    'Popular',
-    'Characters',
-    'Celebrities',
-    'Avatars',
-    'Custom',
-  ];
-
-  final List<Map<String, String>> _templates = [
-    {'id': '1', 'name': 'Character A', 'category': 'Characters'},
-    {'id': '2', 'name': 'Character B', 'category': 'Characters'},
-    {'id': '3', 'name': 'Celebrity 1', 'category': 'Celebrities'},
-    {'id': '4', 'name': 'Avatar 1', 'category': 'Avatars'},
-    {'id': '5', 'name': 'Character C', 'category': 'Characters'},
-    {'id': '6', 'name': 'Celebrity 2', 'category': 'Celebrities'},
-    {'id': '7', 'name': 'Avatar 2', 'category': 'Avatars'},
-    {'id': '8', 'name': 'Custom A', 'category': 'Custom'},
-    {'id': '9', 'name': 'Character D', 'category': 'Characters'},
-    {'id': '10', 'name': 'Celebrity 3', 'category': 'Celebrities'},
-  ];
-
-  List<Map<String, String>> get _filteredTemplates {
-    if (_selectedFilter == 'All') {
-      return _templates;
+  // Extract unique tags from templates for filters
+  List<String> get _filters {
+    if (_allTemplates.isEmpty) return ['All'];
+    
+    final tagSet = <String>{'All'};
+    for (final template in _allTemplates) {
+      for (final tag in template.tags) {
+        tagSet.add(tag.name);
+      }
     }
-    return _templates
-        .where((template) => template['category'] == _selectedFilter)
-        .toList();
+    return tagSet.toList()..sort();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTemplates();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadTemplates() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final templates = await _templateService.fetchAllTemplates();
+      setState(() {
+        _allTemplates = templates;
+        _filteredTemplates = templates;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _applyFilters() {
+    setState(() {
+      _filteredTemplates = _allTemplates.where((template) {
+        // Apply tag filter
+        if (_selectedFilter != 'All' && !template.hasTag(_selectedFilter)) {
+          return false;
+        }
+        
+        // Apply search filter
+        if (_searchController.text.isNotEmpty) {
+          return template.title.toLowerCase().contains(
+            _searchController.text.toLowerCase(),
+          );
+        }
+        
+        return true;
+      }).toList();
+    });
   }
 
   @override
@@ -61,11 +107,97 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
             color: AppTheme.textPrimary,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh_rounded),
+            onPressed: _loadTemplates,
+          ),
+        ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Filter badges
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _errorMessage != null
+              ? _buildErrorView()
+              : _buildTemplatesView(),
+    );
+  }
+
+  Widget _buildErrorView() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(AppTheme.sidePadding),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline_rounded,
+              size: 64,
+              color: AppTheme.statusError,
+            ),
+            const SizedBox(height: AppTheme.spacingLg),
+            Text(
+              'Failed to Load Templates',
+              style: GoogleFonts.ebGaramond(
+                fontSize: 24,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textPrimary,
+              ),
+            ),
+            const SizedBox(height: AppTheme.spacingSm),
+            Text(
+              _errorMessage ?? 'Unknown error',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.figtree(
+                fontSize: 14,
+                color: AppTheme.textSecondary,
+              ),
+            ),
+            const SizedBox(height: AppTheme.spacingLg),
+            ElevatedButton(
+              onPressed: _loadTemplates,
+              child: Text(
+                'Retry',
+                style: GoogleFonts.figtree(fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTemplatesView() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Search bar
+        Padding(
+          padding: const EdgeInsets.all(AppTheme.sidePadding),
+          child: TextField(
+            controller: _searchController,
+            onChanged: (_) => _applyFilters(),
+            decoration: InputDecoration(
+              hintText: 'Search templates...',
+              hintStyle: GoogleFonts.figtree(
+                fontSize: 14,
+                color: AppTheme.textSecondary.withOpacity(0.6),
+              ),
+              prefixIcon: const Icon(Icons.search_rounded),
+              suffixIcon: _searchController.text.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.clear_rounded),
+                      onPressed: () {
+                        _searchController.clear();
+                        _applyFilters();
+                      },
+                    )
+                  : null,
+            ),
+          ),
+        ),
+
+        // Filter badges
+        if (_filters.length > 1)
           Container(
             height: 50,
             padding: const EdgeInsets.symmetric(vertical: AppTheme.spacingSm),
@@ -91,7 +223,10 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
                     ),
                     selected: isSelected,
                     onSelected: (selected) {
-                      setState(() => _selectedFilter = filter);
+                      setState(() {
+                        _selectedFilter = filter;
+                        _applyFilters();
+                      });
                     },
                     backgroundColor: AppTheme.cardNeutral,
                     selectedColor: AppTheme.accentPrimary,
@@ -111,151 +246,320 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
             ),
           ),
 
-          // Template count
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppTheme.sidePadding,
-              vertical: AppTheme.spacingSm,
-            ),
-            child: Text(
-              '${_filteredTemplates.length} templates available',
-              style: GoogleFonts.figtree(
-                fontSize: 13,
-                color: AppTheme.textSecondary,
-              ),
+        // Template count
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppTheme.sidePadding,
+            vertical: AppTheme.spacingSm,
+          ),
+          child: Text(
+            '${_filteredTemplates.length} templates available',
+            style: GoogleFonts.figtree(
+              fontSize: 13,
+              color: AppTheme.textSecondary,
             ),
           ),
+        ),
 
-          // Template grid
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(AppTheme.sidePadding),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: AppTheme.spacingMd,
-                mainAxisSpacing: AppTheme.spacingMd,
-                childAspectRatio: 0.85,
-              ),
-              itemCount: _filteredTemplates.length,
-              itemBuilder: (context, index) {
-                final template = _filteredTemplates[index];
-                final isSelected = template['id'] == _selectedTemplate;
-                return _buildTemplateCard(template, isSelected);
-              },
-            ),
-          ),
-
-          // Select button
-          if (_selectedTemplate != null)
-            Container(
-              padding: const EdgeInsets.all(AppTheme.sidePadding),
-              decoration: BoxDecoration(
-                color: AppTheme.backgroundMain,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 8,
-                    offset: const Offset(0, -2),
+        // Template grid
+        Expanded(
+          child: _filteredTemplates.isEmpty
+              ? _buildEmptyState()
+              : GridView.builder(
+                  padding: const EdgeInsets.all(AppTheme.sidePadding),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: AppTheme.spacingMd,
+                    mainAxisSpacing: AppTheme.spacingMd,
+                    childAspectRatio: 0.55, // Taller cards for 9:16 videos
                   ),
-                ],
-              ),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(_selectedTemplate);
+                  itemCount: _filteredTemplates.length,
+                  itemBuilder: (context, index) {
+                    final template = _filteredTemplates[index];
+                    final isSelected = template.id == _selectedTemplateId;
+                    return _buildTemplateCard(template, isSelected);
                   },
-                  child: Text(
-                    'Select Template',
-                    style: GoogleFonts.figtree(fontWeight: FontWeight.w600),
-                  ),
+                ),
+        ),
+
+        // Select button
+        if (_selectedTemplateId != null)
+          Container(
+            padding: const EdgeInsets.all(AppTheme.sidePadding),
+            decoration: BoxDecoration(
+              color: AppTheme.backgroundMain,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, -2),
+                ),
+              ],
+            ),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(_selectedTemplateId.toString());
+                },
+                child: Text(
+                  'Select Template',
+                  style: GoogleFonts.figtree(fontWeight: FontWeight.w600),
                 ),
               ),
             ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.search_off_rounded,
+            size: 64,
+            color: AppTheme.textSecondary.withOpacity(0.5),
+          ),
+          const SizedBox(height: AppTheme.spacingLg),
+          Text(
+            'No Templates Found',
+            style: GoogleFonts.ebGaramond(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.textPrimary,
+            ),
+          ),
+          const SizedBox(height: AppTheme.spacingSm),
+          Text(
+            'Try adjusting your filters',
+            style: GoogleFonts.figtree(
+              fontSize: 14,
+              color: AppTheme.textSecondary,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildTemplateCard(Map<String, String> template, bool isSelected) {
-    return GestureDetector(
-      onTap: () {
-        setState(() => _selectedTemplate = template['id']);
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppTheme.cardNeutral,
-          borderRadius: BorderRadius.circular(AppTheme.cardRadius),
-          border: Border.all(
-            color: isSelected
-                ? AppTheme.accentPrimary
-                : AppTheme.borderLight,
-            width: isSelected ? 3 : 2,
-          ),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: AppTheme.accentPrimary.withOpacity(0.3),
-                    blurRadius: 8,
-                    spreadRadius: 2,
-                  ),
-                ]
-              : AppTheme.cardShadow,
-        ),
+  Widget _buildTemplateCard(VideoTemplate template, bool isSelected) {
+    final isHovered = template.id == _hoveredTemplateId;
+    
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hoveredTemplateId = template.id),
+      onExit: (_) => setState(() => _hoveredTemplateId = null),
+      child: GestureDetector(
+        onTap: () {
+          setState(() => _selectedTemplateId = template.id);
+        },
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: AppTheme.accentPrimary.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.person_rounded,
-                color: AppTheme.accentPrimary,
-                size: 40,
+            // Thumbnail or Video Preview
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(AppTheme.cardRadius),
+                  border: Border.all(
+                    color: isSelected
+                        ? AppTheme.accentPrimary
+                        : AppTheme.borderLight,
+                    width: isSelected ? 3 : 2,
+                  ),
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: AppTheme.accentPrimary.withOpacity(0.3),
+                            blurRadius: 8,
+                            spreadRadius: 2,
+                          ),
+                        ]
+                      : AppTheme.cardShadow,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(AppTheme.cardRadius),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      isHovered
+                          ? _VideoPreview(videoUrl: template.previewUrl)
+                          : CachedNetworkImage(
+                              imageUrl: template.thumbnailUrl,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => Container(
+                                color: AppTheme.accentPrimary.withOpacity(0.1),
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                color: AppTheme.accentPrimary.withOpacity(0.1),
+                                child: Icon(
+                                  Icons.video_library_rounded,
+                                  color: AppTheme.accentPrimary,
+                                  size: 40,
+                                ),
+                              ),
+                            ),
+                      
+                      // Selection indicator overlay
+                      if (isSelected)
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: AppTheme.accentPrimary,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.check_rounded,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
               ),
             ),
-            const SizedBox(height: AppTheme.spacingMd),
+            
+            const SizedBox(height: AppTheme.spacingSm),
+            
+            // Title below thumbnail
             Text(
-              template['name']!,
+              template.title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: GoogleFonts.figtree(
-                fontSize: 14,
+                fontSize: 13,
                 fontWeight: FontWeight.w600,
                 color: AppTheme.textPrimary,
               ),
             ),
+            
             const SizedBox(height: AppTheme.spacingXs),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppTheme.spacingSm,
-                vertical: 2,
+            
+            // Tags
+            if (template.tags.isNotEmpty)
+              Wrap(
+                spacing: 4,
+                runSpacing: 4,
+                children: template.tags.take(3).map((tag) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppTheme.accentPrimary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      tag.name,
+                      style: GoogleFonts.figtree(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500,
+                        color: AppTheme.accentPrimary,
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
-              decoration: BoxDecoration(
-                color: AppTheme.accentPrimary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(AppTheme.cardRadiusSmall),
-              ),
-              child: Text(
-                template['category']!,
-                style: GoogleFonts.figtree(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
-                  color: AppTheme.accentPrimary,
-                ),
-              ),
-            ),
-            if (isSelected) ...[
-              const SizedBox(height: AppTheme.spacingSm),
-              Icon(
-                Icons.check_circle_rounded,
-                color: AppTheme.accentPrimary,
-                size: 24,
-              ),
-            ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Video preview widget that plays on hover
+class _VideoPreview extends StatefulWidget {
+  final String videoUrl;
+
+  const _VideoPreview({required this.videoUrl});
+
+  @override
+  State<_VideoPreview> createState() => _VideoPreviewState();
+}
+
+class _VideoPreviewState extends State<_VideoPreview> {
+  late VideoPlayerController _controller;
+  bool _isInitialized = false;
+  bool _hasError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeVideo();
+  }
+
+  Future<void> _initializeVideo() async {
+    try {
+      _controller = VideoPlayerController.networkUrl(
+        Uri.parse(widget.videoUrl),
+      );
+      
+      await _controller.initialize();
+      
+      if (mounted) {
+        setState(() => _isInitialized = true);
+        _controller.setLooping(true);
+        _controller.setVolume(0); // Mute preview
+        _controller.play();
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _hasError = true);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_hasError) {
+      return Container(
+        color: AppTheme.accentPrimary.withOpacity(0.1),
+        child: Icon(
+          Icons.video_library_rounded,
+          color: AppTheme.accentPrimary,
+          size: 40,
+        ),
+      );
+    }
+
+    if (!_isInitialized) {
+      return Container(
+        color: AppTheme.accentPrimary.withOpacity(0.1),
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    return FittedBox(
+      fit: BoxFit.cover,
+      child: SizedBox(
+        width: _controller.value.size.width,
+        height: _controller.value.size.height,
+        child: VideoPlayer(_controller),
       ),
     );
   }
