@@ -30,7 +30,7 @@ dependencies:
   # Video player for preview
   video_player: ^2.8.2
   # Audio recording
-  record: ^5.0.4
+  record: ^6.0.0
   # Path provider for saving files
   path_provider: ^2.1.2
   # Permissions
