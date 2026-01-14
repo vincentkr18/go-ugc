@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:file_picker/file_picker.dart';
 import '../theme/app_theme.dart';
 
 class AudioSelectionScreen extends StatefulWidget {
@@ -15,21 +16,59 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
   int _recordingDuration = 0;
 
   void _handleUpload() async {
-    // In a real app, this would open file picker
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Audio file selected',
-          style: GoogleFonts.figtree(),
-        ),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: AppTheme.statusComplete,
-      ),
-    );
-    // Simulate file selection
-    await Future.delayed(const Duration(milliseconds: 500));
-    if (mounted) {
-      Navigator.of(context).pop('uploaded_audio.mp3');
+    try {
+      // Open file picker for audio files
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.audio,
+        allowMultiple: false,
+      );
+
+      if (result != null && result.files.isNotEmpty) {
+        final file = result.files.first;
+        final fileName = file.name;
+        
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Audio file selected: $fileName',
+                style: GoogleFonts.figtree(),
+              ),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: AppTheme.statusComplete,
+            ),
+          );
+          // Return the file path or name
+          Navigator.of(context).pop(file.path ?? fileName);
+        }
+      } else {
+        // User canceled the picker
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'No file selected',
+                style: GoogleFonts.figtree(),
+              ),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: AppTheme.textSecondary,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Error selecting file: $e',
+              style: GoogleFonts.figtree(),
+            ),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: AppTheme.statusError,
+          ),
+        );
+      }
     }
   }
 

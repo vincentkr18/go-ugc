@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import 'ugc_dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -207,6 +209,28 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                         ),
                       ),
                       const SizedBox(height: 30),
+                      
+                      // Skip Login for Web Development (Debug Mode Only)
+                      if (kIsWeb && kDebugMode)
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const UgcDashboardScreen(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Skip Login (Dev Mode)',
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.9),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      if (kIsWeb && kDebugMode) const SizedBox(height: 20),
                       
                       // Privacy & Terms
                       Padding(

@@ -172,27 +172,27 @@ class _UgcDashboardScreenState extends State<UgcDashboardScreen> with TickerProv
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(AppTheme.sidePadding),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Welcome back,',
-                      style: GoogleFonts.figtree(
-                        fontSize: 16,
-                        color: AppTheme.textSecondary,
-                      ),
+                child: RichText(
+                  text: TextSpan(
+                    text: 'Welcome back, ',
+                    style: GoogleFonts.ebGaramond(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.textPrimary,
+                      letterSpacing: -0.5,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _userName,
-                      style: GoogleFonts.ebGaramond(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.textPrimary,
-                        letterSpacing: -0.5,
+                    children: [
+                      TextSpan(
+                        text: _userName,
+                        style: GoogleFonts.ebGaramond(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.textPrimary,
+                          letterSpacing: -0.5,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
