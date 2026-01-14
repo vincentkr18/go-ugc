@@ -187,17 +187,10 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                     valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6C63FF)),
                                   ),
                                 )
-                              : Image.asset(
-                                  'assets/images/google_logo.png',
-                                  height: 24,
-                                  width: 24,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    // Fallback to icon if image is not available
-                                    return const Icon(
-                                      Icons.login,
-                                      color: Color(0xFF6C63FF),
-                                    );
-                                  },
+                              : const Icon(
+                                  Icons.login,
+                                  color: Color(0xFF6C63FF),
+                                  size: 24,
                                 ),
                           label: Text(
                             _isLoading ? 'Signing in...' : 'Sign in with Google',

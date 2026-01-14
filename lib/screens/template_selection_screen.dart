@@ -384,26 +384,29 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      isHovered
-                          ? _VideoPreview(videoUrl: template.previewUrl)
-                          : CachedNetworkImage(
-                              imageUrl: template.thumbnailUrl,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) => Container(
-                                color: AppTheme.accentPrimary.withOpacity(0.1),
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                color: AppTheme.accentPrimary.withOpacity(0.1),
-                                child: Icon(
-                                  Icons.video_library_rounded,
-                                  color: AppTheme.accentPrimary,
-                                  size: 40,
-                                ),
-                              ),
-                            ),
+                      // Always show thumbnail as base layer
+                      CachedNetworkImage(
+                        imageUrl: template.thumbnailUrl,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Container(
+                          color: AppTheme.accentPrimary.withOpacity(0.1),
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: AppTheme.accentPrimary.withOpacity(0.1),
+                          child: Icon(
+                            Icons.video_library_rounded,
+                            color: AppTheme.accentPrimary,
+                            size: 40,
+                          ),
+                        ),
+                      ),
+                      
+                      // Show video on top when hovered and ready
+                      if (isHovered)
+                        _VideoPreview(videoUrl: template.previewUrl),
                       
                       // Selection indicator overlay
                       if (isSelected)
@@ -535,23 +538,11 @@ class _VideoPreviewState extends State<_VideoPreview> {
   @override
   Widget build(BuildContext context) {
     if (_hasError) {
-      return Container(
-        color: AppTheme.accentPrimary.withOpacity(0.1),
-        child: Icon(
-          Icons.video_library_rounded,
-          color: AppTheme.accentPrimary,
-          size: 40,
-        ),
-      );
+      return const SizedBox.shrink(); // Don't show anything if error
     }
 
     if (!_isInitialized) {
-      return Container(
-        color: AppTheme.accentPrimary.withOpacity(0.1),
-        child: const Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const SizedBox.shrink(); // Don't show anything while loading
     }
 
     return FittedBox(
