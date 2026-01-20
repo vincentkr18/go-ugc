@@ -29,7 +29,7 @@ class ModelSelectionScreen extends StatefulWidget {
 }
 
 class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
-  String? _selectedModelId;
+  // No selection state needed
 
   final List<ModelType> _models = [
     ModelType(
@@ -131,31 +131,7 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
               ),
             ),
             
-            // Continue button
-            if (_selectedModelId != null)
-              Container(
-                padding: const EdgeInsets.all(AppTheme.sidePadding),
-                decoration: BoxDecoration(
-                  color: AppTheme.backgroundSidebar,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, -2),
-                    ),
-                  ],
-                ),
-                child: SafeArea(
-                  top: false,
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _navigateToCreation,
-                      child: const Text('Continue'),
-                    ),
-                  ),
-                ),
-              ),
+            // No continue button, direct navigation
           ],
         ),
       ),
@@ -163,20 +139,15 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
   }
 
   Widget _buildModelCard(ModelType model) {
-    final isSelected = _selectedModelId == model.id;
-    
     return GestureDetector(
-      onTap: () => setState(() => _selectedModelId = model.id),
+      onTap: () => _navigateToCreation(model.id),
       child: AnimatedContainer(
         duration: AppTheme.microDuration,
         margin: const EdgeInsets.only(bottom: AppTheme.spacingMd),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isSelected ? Colors.black : Colors.transparent,
-            width: 2,
-          ),
-          boxShadow: isSelected ? AppTheme.elevatedShadow : AppTheme.cardShadow,
+          // No border on selection
+          boxShadow: AppTheme.cardShadow,
           image: model.assetImage != null
               ? DecorationImage(
                   image: AssetImage(model.assetImage!),
@@ -215,19 +186,7 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
                   ],
                 ),
               ),
-              if (isSelected)
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
-                    color: Colors.black,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.check_rounded,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                ),
+              // No checkmark
             ],
           ),
         ),
@@ -235,13 +194,11 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
     );
   }
 
-  void _navigateToCreation() {
-    if (_selectedModelId == null) return;
-    
+  void _navigateToCreation(String modelId) {
     Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            UgcCreationScreen(modelId: _selectedModelId!),
+            UgcCreationScreen(modelId: modelId),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(1.0, 0.0);
           const end = Offset.zero;
