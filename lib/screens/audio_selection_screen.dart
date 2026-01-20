@@ -44,7 +44,7 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
             SnackBar(
               content: Text(
                 'Audio file selected: $fileName',
-                style: GoogleFonts.figtree(),
+                style: GoogleFonts.manrope(),
               ),
               behavior: SnackBarBehavior.floating,
               backgroundColor: AppTheme.statusComplete,
@@ -60,7 +60,7 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
             SnackBar(
               content: Text(
                 'No file selected',
-                style: GoogleFonts.figtree(),
+                style: GoogleFonts.manrope(),
               ),
               behavior: SnackBarBehavior.floating,
               backgroundColor: AppTheme.textSecondary,
@@ -74,7 +74,7 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
           SnackBar(
             content: Text(
               'Error selecting file: $e',
-              style: GoogleFonts.figtree(),
+              style: GoogleFonts.manrope(),
             ),
             behavior: SnackBarBehavior.floating,
             backgroundColor: AppTheme.statusError,
@@ -105,7 +105,7 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
             SnackBar(
               content: Text(
                 'Microphone permission is required to record audio',
-                style: GoogleFonts.figtree(),
+                style: GoogleFonts.manrope(),
               ),
               behavior: SnackBarBehavior.floating,
               backgroundColor: AppTheme.statusError,
@@ -154,7 +154,7 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
           SnackBar(
             content: Text(
               'Error starting recording: $e',
-              style: GoogleFonts.figtree(),
+              style: GoogleFonts.manrope(),
             ),
             behavior: SnackBarBehavior.floating,
             backgroundColor: AppTheme.statusError,
@@ -181,7 +181,7 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
           SnackBar(
             content: Text(
               'Error stopping recording: $e',
-              style: GoogleFonts.figtree(),
+              style: GoogleFonts.manrope(),
             ),
             behavior: SnackBarBehavior.floating,
             backgroundColor: AppTheme.statusError,
@@ -209,7 +209,7 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
             SnackBar(
               content: Text(
                 'Error: Recorded file not found',
-                style: GoogleFonts.figtree(),
+                style: GoogleFonts.manrope(),
               ),
               behavior: SnackBarBehavior.floating,
               backgroundColor: AppTheme.statusError,
@@ -223,7 +223,7 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
           SnackBar(
             content: Text(
               'No audio recorded',
-              style: GoogleFonts.figtree(),
+              style: GoogleFonts.manrope(),
             ),
             behavior: SnackBarBehavior.floating,
             backgroundColor: AppTheme.statusError,
@@ -250,7 +250,7 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
         ),
         title: Text(
           'Add Audio',
-          style: GoogleFonts.figtree(
+          style: GoogleFonts.manrope(
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: AppTheme.textPrimary,
@@ -275,16 +275,16 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
         children: [
           Text(
             'Choose Audio Source',
-            style: GoogleFonts.ebGaramond(
+            style: GoogleFonts.manrope(
               fontSize: 28,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
               color: AppTheme.textPrimary,
             ),
           ),
           const SizedBox(height: AppTheme.spacingSm),
           Text(
             'Select how you want to add audio to your video',
-            style: GoogleFonts.figtree(
+            style: GoogleFonts.manrope(
               fontSize: 14,
               color: AppTheme.textSecondary,
             ),
@@ -296,7 +296,7 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
             title: 'Upload Audio File',
             subtitle: 'Choose an audio file from your device',
             icon: Icons.upload_file_rounded,
-            iconColor: AppTheme.accentPrimary,
+            iconColor: Colors.black,
             onTap: () {
               setState(() => _selectedOption = 'upload');
               _handleUpload();
@@ -329,7 +329,7 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
                 SnackBar(
                   content: Text(
                     'Text to Speech feature coming soon',
-                    style: GoogleFonts.figtree(),
+                    style: GoogleFonts.manrope(),
                   ),
                   behavior: SnackBarBehavior.floating,
                 ),
@@ -376,7 +376,7 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.figtree(
+                    style: GoogleFonts.manrope(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: AppTheme.textPrimary,
@@ -385,7 +385,7 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
                   const SizedBox(height: AppTheme.spacingXs),
                   Text(
                     subtitle,
-                    style: GoogleFonts.figtree(
+                    style: GoogleFonts.manrope(
                       fontSize: 13,
                       color: AppTheme.textSecondary,
                     ),
@@ -418,11 +418,11 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
                 shape: BoxShape.circle,
                 color: _isRecording
                     ? AppTheme.statusInProgress.withOpacity(0.1)
-                    : AppTheme.accentPrimary.withOpacity(0.1),
+                    : Colors.black.withOpacity(0.1),
                 border: Border.all(
                   color: _isRecording
                       ? AppTheme.statusInProgress
-                      : AppTheme.accentPrimary,
+                      : Colors.black,
                   width: 4,
                 ),
               ),
@@ -432,7 +432,7 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
                   size: 80,
                   color: _isRecording
                       ? AppTheme.statusInProgress
-                      : AppTheme.accentPrimary,
+                      : Colors.black,
                 ),
               ),
             ),
@@ -442,7 +442,7 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
             // Timer
             Text(
               _formatDuration(_recordingDuration),
-              style: GoogleFonts.figtree(
+              style: GoogleFonts.manrope(
                 fontSize: 48,
                 fontWeight: FontWeight.w600,
                 color: AppTheme.textPrimary,
@@ -453,7 +453,7 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
 
             Text(
               _isRecording ? 'Recording...' : 'Ready to record',
-              style: GoogleFonts.figtree(
+              style: GoogleFonts.manrope(
                 fontSize: 16,
                 color: AppTheme.textSecondary,
               ),
@@ -474,7 +474,7 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
                       icon: const Icon(Icons.arrow_back_rounded),
                       label: Text(
                         'Back',
-                        style: GoogleFonts.figtree(fontWeight: FontWeight.w600),
+                        style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),
@@ -485,12 +485,12 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
                     icon: Icon(_isRecording ? Icons.check_rounded : Icons.fiber_manual_record_rounded),
                     label: Text(
                       _isRecording ? 'Save' : 'Start',
-                      style: GoogleFonts.figtree(fontWeight: FontWeight.w600),
+                      style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _isRecording
                           ? AppTheme.statusComplete
-                          : AppTheme.accentPrimary,
+                          : Colors.black,
                     ),
                   ),
                 ),
@@ -509,14 +509,14 @@ class _AudioSelectionScreenState extends State<AudioSelectionScreen> {
                   children: [
                     Icon(
                       Icons.info_outline_rounded,
-                      color: AppTheme.accentPrimary,
+                      color: Colors.black,
                       size: 20,
                     ),
                     const SizedBox(width: AppTheme.spacingSm),
                     Expanded(
                       child: Text(
                         'Speak clearly into the microphone',
-                        style: GoogleFonts.figtree(
+                        style: GoogleFonts.manrope(
                           fontSize: 12,
                           color: AppTheme.textPrimary,
                         ),

@@ -77,9 +77,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                   // Header
                   Text(
                     'Profile',
-                    style: GoogleFonts.ebGaramond(
+                    style: GoogleFonts.manrope(
                       fontSize: 32,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                       color: isDarkMode ? AppTheme.textPrimaryDark : AppTheme.textPrimary,
                     ),
                   ),
@@ -95,7 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                           height: AppTheme.avatarSizeLarge,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [AppTheme.accentPrimary, AppTheme.accentHover],
+                              colors: [Colors.black, Colors.black87],
                             ),
                             shape: BoxShape.circle,
                             boxShadow: AppTheme.elevatedShadow,
@@ -109,16 +109,16 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                         const SizedBox(height: AppTheme.spacingMd),
                         Text(
                           _userName,
-                          style: GoogleFonts.ebGaramond(
+                          style: GoogleFonts.manrope(
                             fontSize: 24,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w700,
                             color: isDarkMode ? AppTheme.textPrimaryDark : AppTheme.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           _userEmail,
-                          style: GoogleFonts.figtree(
+                          style: GoogleFonts.manrope(
                             fontSize: 14,
                             color: isDarkMode ? AppTheme.textSecondaryDark : AppTheme.textSecondary,
                           ),
@@ -209,7 +209,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
               children: [
                 Text(
                   'Dark Mode',
-                  style: GoogleFonts.figtree(
+                  style: GoogleFonts.manrope(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: currentThemeColors.$1,
@@ -217,7 +217,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                 ),
                 Text(
                   isDarkMode ? 'Dark theme enabled' : 'Light theme enabled',
-                  style: GoogleFonts.figtree(
+                  style: GoogleFonts.manrope(
                     fontSize: 12,
                     color: isDarkMode ? AppTheme.textSecondaryDark : AppTheme.textSecondary,
                   ),
@@ -228,7 +228,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           Switch(
             value: isDarkMode,
             onChanged: (_) => themeProvider.toggleTheme(),
-            activeColor: AppTheme.accentPrimary,
+            activeColor: Colors.black,
           ),
         ],
       ),
@@ -242,7 +242,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
         padding: const EdgeInsets.all(AppTheme.cardPadding),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppTheme.accentPrimary, AppTheme.accentHover],
+            colors: [Colors.black, Colors.black87],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -270,7 +270,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                 children: [
                   Text(
                     'Free Plan',
-                    style: GoogleFonts.figtree(
+                    style: GoogleFonts.manrope(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
@@ -278,7 +278,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                   ),
                   Text(
                     'Upgrade to Pro for unlimited videos',
-                    style: GoogleFonts.figtree(
+                    style: GoogleFonts.manrope(
                       fontSize: 12,
                       color: Colors.white.withOpacity(0.9),
                     ),
@@ -333,7 +333,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             Expanded(
               child: Text(
                 label,
-                style: GoogleFonts.figtree(
+                style: GoogleFonts.manrope(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: isDestructive ? AppTheme.statusError : textColor,
@@ -359,9 +359,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
         ),
         title: Text(
           'Upgrade to Pro',
-          style: GoogleFonts.ebGaramond(
+          style: GoogleFonts.manrope(
             fontSize: 24,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
           ),
         ),
         content: Column(
@@ -370,7 +370,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           children: [
             Text(
               'Get unlimited video generation and premium features',
-              style: GoogleFonts.figtree(fontSize: 14),
+              style: GoogleFonts.manrope(fontSize: 14),
             ),
             const SizedBox(height: AppTheme.spacingLg),
             _buildFeatureItem('Unlimited videos'),
@@ -382,19 +382,19 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Maybe Later', style: GoogleFonts.figtree()),
+            child: Text('Maybe Later', style: GoogleFonts.manrope()),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Upgrade feature coming soon!', style: GoogleFonts.figtree()),
+                  content: Text('Upgrade feature coming soon!', style: GoogleFonts.manrope()),
                   behavior: SnackBarBehavior.floating,
                 ),
               );
             },
-            child: Text('Upgrade Now', style: GoogleFonts.figtree(fontWeight: FontWeight.w600)),
+            child: Text('Upgrade Now', style: GoogleFonts.manrope(fontWeight: FontWeight.w600)),
           ),
         ],
       ),
@@ -408,7 +408,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
         children: [
           const Icon(Icons.check_circle, color: AppTheme.statusComplete, size: 20),
           const SizedBox(width: AppTheme.spacingSm),
-          Text(text, style: GoogleFonts.figtree(fontSize: 14)),
+          Text(text, style: GoogleFonts.manrope(fontSize: 14)),
         ],
       ),
     );
@@ -423,34 +423,34 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
         ),
         title: Text(
           'Close Account?',
-          style: GoogleFonts.ebGaramond(
+          style: GoogleFonts.manrope(
             fontSize: 24,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
             color: AppTheme.statusError,
           ),
         ),
         content: Text(
           'This action cannot be undone. All your videos and data will be permanently deleted.',
-          style: GoogleFonts.figtree(fontSize: 14),
+          style: GoogleFonts.manrope(fontSize: 14),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel', style: GoogleFonts.figtree()),
+            child: Text('Cancel', style: GoogleFonts.manrope()),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Account closure is not available yet', style: GoogleFonts.figtree()),
+                  content: Text('Account closure is not available yet', style: GoogleFonts.manrope()),
                   backgroundColor: AppTheme.statusError,
                   behavior: SnackBarBehavior.floating,
                 ),
               );
             },
             style: ElevatedButton.styleFrom(backgroundColor: AppTheme.statusError),
-            child: Text('Close Account', style: GoogleFonts.figtree(fontWeight: FontWeight.w600)),
+            child: Text('Close Account', style: GoogleFonts.manrope(fontWeight: FontWeight.w600)),
           ),
         ],
       ),

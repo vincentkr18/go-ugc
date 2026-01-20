@@ -104,7 +104,7 @@ class _UserAuthDetailsCardState extends State<UserAuthDetailsCard> {
         child: Column(
           children: [
             CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.accentPrimary),
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
             ),
             SizedBox(height: AppTheme.spacingMd),
             Text(
@@ -257,7 +257,7 @@ class _UserAuthDetailsCardState extends State<UserAuthDetailsCard> {
             child: Icon(
               icon,
               size: 16,
-              color: AppTheme.accentPrimary,
+              color: Colors.black,
             ),
           ),
           const SizedBox(width: 12),
@@ -311,7 +311,7 @@ class _UserAuthDetailsCardState extends State<UserAuthDetailsCard> {
         break;
       default:
         providerIcon = Icons.account_circle;
-        providerColor = AppTheme.accentPrimary;
+        providerColor = Colors.black;
     }
     
     return Container(

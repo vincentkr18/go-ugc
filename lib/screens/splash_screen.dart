@@ -114,8 +114,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              AppTheme.accentPrimary,
-                              AppTheme.accentHover,
+                              Colors.black,
+                              Colors.black87,
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -135,9 +135,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       // App Name - Garamond
                       Text(
                         'UGC Studio',
-                        style: GoogleFonts.ebGaramond(
+                        style: GoogleFonts.manrope(
                           fontSize: 36,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w700,
                           color: AppTheme.textPrimary,
                           letterSpacing: -0.5,
                         ),
@@ -148,7 +148,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       // Tagline - Figtree
                       Text(
                         'Create amazing video content',
-                        style: GoogleFonts.figtree(
+                        style: GoogleFonts.manrope(
                           fontSize: 16,
                           color: AppTheme.textSecondary,
                         ),
@@ -162,7 +162,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         height: 40,
                         child: CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation<Color>(
-                            AppTheme.accentPrimary.withOpacity(0.5),
+                            Colors.black.withOpacity(0.5),
                           ),
                           strokeWidth: 3,
                         ),

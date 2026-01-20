@@ -106,7 +106,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         ),
         title: Text(
           widget.videoTitle,
-          style: GoogleFonts.figtree(
+          style: GoogleFonts.manrope(
             fontSize: 16,
             fontWeight: FontWeight.w600,
             color: Colors.white,
@@ -137,9 +137,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           const SizedBox(height: AppTheme.spacingLg),
           Text(
             'Failed to Load Video',
-            style: GoogleFonts.ebGaramond(
+            style: GoogleFonts.manrope(
               fontSize: 24,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
               color: Colors.white,
             ),
           ),
@@ -147,7 +147,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           Text(
             _errorMessage ?? 'Unknown error occurred',
             textAlign: TextAlign.center,
-            style: GoogleFonts.figtree(
+            style: GoogleFonts.manrope(
               fontSize: 14,
               color: Colors.white70,
             ),
@@ -163,7 +163,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             },
             child: Text(
               'Retry',
-              style: GoogleFonts.figtree(fontWeight: FontWeight.w600),
+              style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -181,7 +181,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         const SizedBox(height: AppTheme.spacingLg),
         Text(
           'Loading video...',
-          style: GoogleFonts.figtree(
+          style: GoogleFonts.manrope(
             fontSize: 14,
             color: Colors.white70,
           ),
@@ -273,7 +273,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                       final newPosition = duration * value;
                       _controller.seekTo(newPosition);
                     },
-                    activeColor: AppTheme.accentPrimary,
+                    activeColor: Colors.black,
                     inactiveColor: Colors.white.withOpacity(0.3),
                   ),
                 ),
@@ -288,14 +288,14 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                     children: [
                       Text(
                         _formatDuration(position),
-                        style: GoogleFonts.figtree(
+                        style: GoogleFonts.manrope(
                           fontSize: 12,
                           color: Colors.white,
                         ),
                       ),
                       Text(
                         _formatDuration(duration),
-                        style: GoogleFonts.figtree(
+                        style: GoogleFonts.manrope(
                           fontSize: 12,
                           color: Colors.white,
                         ),

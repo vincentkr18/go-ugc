@@ -66,7 +66,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
         ),
         title: Text(
           _modelName,
-          style: GoogleFonts.figtree(
+          style: GoogleFonts.manrope(
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: AppTheme.textPrimary,
@@ -87,16 +87,16 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
         children: [
           Text(
             'Create Your Video',
-            style: GoogleFonts.ebGaramond(
+            style: GoogleFonts.manrope(
               fontSize: 28,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
               color: AppTheme.textPrimary,
             ),
           ),
           const SizedBox(height: AppTheme.spacingSm),
           Text(
             'Provide details for your ${_modelName} video',
-            style: GoogleFonts.figtree(
+            style: GoogleFonts.manrope(
               fontSize: 14,
               color: AppTheme.textSecondary,
             ),
@@ -118,7 +118,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
         // Template selection
         Text(
           'Choose Template',
-          style: GoogleFonts.figtree(
+          style: GoogleFonts.manrope(
             fontSize: 16,
             fontWeight: FontWeight.w600,
             color: AppTheme.textPrimary,
@@ -146,7 +146,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
               borderRadius: BorderRadius.circular(AppTheme.cardRadius),
               border: Border.all(
                 color: _selectedTemplate != null
-                    ? AppTheme.accentPrimary
+                    ? Colors.black
                     : AppTheme.borderLight,
                 width: 2,
               ),
@@ -157,12 +157,12 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                 Container(
                   padding: const EdgeInsets.all(AppTheme.spacingMd),
                   decoration: BoxDecoration(
-                    color: AppTheme.accentPrimary.withOpacity(0.1),
+                    color: Colors.black.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(AppTheme.cardRadiusSmall),
                   ),
                   child: Icon(
                     Icons.grid_view_rounded,
-                    color: AppTheme.accentPrimary,
+                    color: Colors.black,
                   ),
                 ),
                 const SizedBox(width: AppTheme.spacingMd),
@@ -174,7 +174,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                         _selectedTemplate != null
                             ? 'Template Selected'
                             : 'Select Template',
-                        style: GoogleFonts.figtree(
+                        style: GoogleFonts.manrope(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: AppTheme.textPrimary,
@@ -184,7 +184,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                         _selectedTemplate != null
                             ? 'Template ID: $_selectedTemplate'
                             : 'Browse 100+ templates',
-                        style: GoogleFonts.figtree(
+                        style: GoogleFonts.manrope(
                           fontSize: 12,
                           color: AppTheme.textSecondary,
                         ),
@@ -229,7 +229,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
               borderRadius: BorderRadius.circular(AppTheme.cardRadius),
               border: Border.all(
                 color: _selectedAudio != null
-                    ? AppTheme.accentPrimary
+                    ? Colors.black
                     : AppTheme.borderLight,
                 width: 2,
               ),
@@ -240,12 +240,12 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                 Container(
                   padding: const EdgeInsets.all(AppTheme.spacingMd),
                   decoration: BoxDecoration(
-                    color: AppTheme.accentPrimary.withOpacity(0.1),
+                    color: Colors.black.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(AppTheme.cardRadiusSmall),
                   ),
                   child: Icon(
                     Icons.audio_file_rounded,
-                    color: AppTheme.accentPrimary,
+                    color: Colors.black,
                   ),
                 ),
                 const SizedBox(width: AppTheme.spacingMd),
@@ -257,7 +257,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                         _selectedAudio != null
                             ? 'Audio Selected'
                             : 'Upload Audio or Record Voice',
-                        style: GoogleFonts.figtree(
+                        style: GoogleFonts.manrope(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: AppTheme.textPrimary,
@@ -267,7 +267,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                         _selectedAudio != null
                             ? _selectedAudio!
                             : 'Upload file or record voice',
-                        style: GoogleFonts.figtree(
+                        style: GoogleFonts.manrope(
                           fontSize: 12,
                           color: AppTheme.textSecondary,
                         ),
@@ -294,7 +294,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                 : null,
             child: Text(
               'Generate Video',
-              style: GoogleFonts.figtree(fontWeight: FontWeight.w600),
+              style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
             ),
           ),
         ),
@@ -309,7 +309,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
         // Prompt input
         Text(
           'Video Prompt',
-          style: GoogleFonts.figtree(
+          style: GoogleFonts.manrope(
             fontSize: 16,
             fontWeight: FontWeight.w600,
             color: AppTheme.textPrimary,
@@ -321,7 +321,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
           maxLines: 4,
           decoration: InputDecoration(
             hintText: 'Describe your video...\nExample: A product showcase of wireless headphones with smooth camera movements',
-            hintStyle: GoogleFonts.figtree(
+            hintStyle: GoogleFonts.manrope(
               fontSize: 14,
               color: AppTheme.textSecondary.withOpacity(0.6),
             ),
@@ -352,7 +352,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                       SnackBar(
                         content: Text(
                           'Image selected: ${file.name}',
-                          style: GoogleFonts.figtree(),
+                          style: GoogleFonts.manrope(),
                         ),
                         behavior: SnackBarBehavior.floating,
                         backgroundColor: AppTheme.statusComplete,
@@ -367,7 +367,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                   SnackBar(
                     content: Text(
                       'Error selecting image: $e',
-                      style: GoogleFonts.figtree(),
+                      style: GoogleFonts.manrope(),
                     ),
                     behavior: SnackBarBehavior.floating,
                     backgroundColor: AppTheme.statusError,
@@ -390,12 +390,12 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                 Container(
                   padding: const EdgeInsets.all(AppTheme.spacingMd),
                   decoration: BoxDecoration(
-                    color: AppTheme.accentPrimary.withOpacity(0.1),
+                    color: Colors.black.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(AppTheme.cardRadiusSmall),
                   ),
                   child: Icon(
                     Icons.image_rounded,
-                    color: AppTheme.accentPrimary,
+                    color: Colors.black,
                   ),
                 ),
                 const SizedBox(width: AppTheme.spacingMd),
@@ -407,7 +407,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                         _selectedProductImage != null
                             ? 'Image Selected'
                             : 'Upload Product Image',
-                        style: GoogleFonts.figtree(
+                        style: GoogleFonts.manrope(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: AppTheme.textPrimary,
@@ -417,7 +417,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                         _selectedProductImage != null
                             ? _selectedProductImage!.path.split('/').last
                             : 'Select product or scene image',
-                        style: GoogleFonts.figtree(
+                        style: GoogleFonts.manrope(
                           fontSize: 12,
                           color: AppTheme.textSecondary,
                         ),
@@ -447,14 +447,14 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
             children: [
               Icon(
                 Icons.lightbulb_outline_rounded,
-                color: AppTheme.accentPrimary,
+                color: Colors.black,
                 size: 20,
               ),
               const SizedBox(width: AppTheme.spacingSm),
               Expanded(
                 child: Text(
                   'Tip: Be specific about camera angles, lighting, and movement for best results',
-                  style: GoogleFonts.figtree(
+                  style: GoogleFonts.manrope(
                     fontSize: 12,
                     color: AppTheme.textPrimary,
                   ),
@@ -472,7 +472,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
             onPressed: _promptController.text.isEmpty ? null : _startGeneration,
             child: Text(
               'Generate Video',
-              style: GoogleFonts.figtree(fontWeight: FontWeight.w600),
+              style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
             ),
           ),
         ),
@@ -501,16 +501,16 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                       strokeWidth: 8,
                       backgroundColor: AppTheme.borderLight,
                       valueColor: const AlwaysStoppedAnimation<Color>(
-                        AppTheme.accentPrimary,
+                        Colors.black,
                       ),
                     ),
                   ),
                   Text(
                     '${(_progress * 100).toInt()}%',
-                    style: GoogleFonts.figtree(
+                    style: GoogleFonts.manrope(
                       fontSize: 24,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.accentPrimary,
+                      color: Colors.black,
                     ),
                   ),
                 ],
@@ -521,9 +521,9 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
             
             Text(
               'Generating Your Video',
-              style: GoogleFonts.ebGaramond(
+              style: GoogleFonts.manrope(
                 fontSize: 24,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
                 color: AppTheme.textPrimary,
               ),
             ),
@@ -532,7 +532,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
             
             Text(
               'This may take a few moments...',
-              style: GoogleFonts.figtree(
+              style: GoogleFonts.manrope(
                 fontSize: 14,
                 color: AppTheme.textSecondary,
               ),
@@ -542,7 +542,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
             
             Text(
               'Estimated time: ${_getEstimatedTime()}',
-              style: GoogleFonts.figtree(
+              style: GoogleFonts.manrope(
                 fontSize: 12,
                 color: AppTheme.textSecondary,
               ),
@@ -620,7 +620,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
           SnackBar(
             content: Text(
               'Error: ${e.toString()}',
-              style: GoogleFonts.figtree(),
+              style: GoogleFonts.manrope(),
             ),
             backgroundColor: AppTheme.statusError,
             behavior: SnackBarBehavior.floating,
@@ -672,9 +672,9 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
             const SizedBox(height: AppTheme.spacingLg),
             Text(
               'Video Ready!',
-              style: GoogleFonts.ebGaramond(
+              style: GoogleFonts.manrope(
                 fontSize: 24,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
                 color: AppTheme.textPrimary,
               ),
             ),
@@ -682,7 +682,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
             Text(
               'Your video has been generated successfully',
               textAlign: TextAlign.center,
-              style: GoogleFonts.figtree(
+              style: GoogleFonts.manrope(
                 fontSize: 14,
                 color: AppTheme.textSecondary,
               ),
@@ -697,7 +697,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                 ),
                 child: Text(
                   'Job ID: $jobId',
-                  style: GoogleFonts.figtree(
+                  style: GoogleFonts.manrope(
                     fontSize: 11,
                     color: AppTheme.textSecondary,
                   ),
@@ -724,7 +724,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
                 },
                 child: Text(
                   'View Video',
-                  style: GoogleFonts.figtree(fontWeight: FontWeight.w600),
+                  style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -739,7 +739,7 @@ class _UgcCreationScreenState extends State<UgcCreationScreen> {
               },
               child: Text(
                 'Back to Dashboard',
-                style: GoogleFonts.figtree(fontWeight: FontWeight.w600),
+                style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
               ),
             ),
           ),

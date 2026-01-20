@@ -20,7 +20,7 @@ class VideoDetailScreen extends StatelessWidget {
         ),
         title: Text(
           'Video Details',
-          style: GoogleFonts.figtree(
+          style: GoogleFonts.manrope(
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: AppTheme.textPrimary,
@@ -63,7 +63,7 @@ class VideoDetailScreen extends StatelessWidget {
                               child: Container(
                                 padding: const EdgeInsets.all(AppTheme.spacingLg),
                                 decoration: BoxDecoration(
-                                  color: AppTheme.accentPrimary,
+                                  color: Colors.black,
                                   shape: BoxShape.circle,
                                   boxShadow: AppTheme.elevatedShadow,
                                 ),
@@ -87,9 +87,9 @@ class VideoDetailScreen extends StatelessWidget {
               // Title
               Text(
                 video.title,
-                style: GoogleFonts.ebGaramond(
+                style: GoogleFonts.manrope(
                   fontSize: 28,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   color: AppTheme.textPrimary,
                 ),
               ),
@@ -116,7 +116,7 @@ class VideoDetailScreen extends StatelessWidget {
                             SnackBar(
                               content: Text(
                                 'Video URL not available',
-                                style: GoogleFonts.figtree(),
+                                style: GoogleFonts.manrope(),
                               ),
                               behavior: SnackBarBehavior.floating,
                               backgroundColor: AppTheme.statusError,
@@ -125,7 +125,7 @@ class VideoDetailScreen extends StatelessWidget {
                         }
                       },
                       icon: const Icon(Icons.play_arrow_rounded),
-                      label: Text('Play', style: GoogleFonts.figtree(fontWeight: FontWeight.w500)),
+                      label: Text('Play', style: GoogleFonts.manrope(fontWeight: FontWeight.w500)),
                     ),
                   ),
                   const SizedBox(width: AppTheme.spacingMd),
@@ -136,14 +136,14 @@ class VideoDetailScreen extends StatelessWidget {
                           SnackBar(
                             content: Text(
                               'Download started...',
-                              style: GoogleFonts.figtree(),
+                              style: GoogleFonts.manrope(),
                             ),
                             behavior: SnackBarBehavior.floating,
                           ),
                         );
                       },
                       icon: const Icon(Icons.download_rounded),
-                      label: Text('Download', style: GoogleFonts.figtree(fontWeight: FontWeight.w500)),
+                      label: Text('Download', style: GoogleFonts.manrope(fontWeight: FontWeight.w500)),
                     ),
                   ),
                 ],
@@ -173,7 +173,7 @@ class VideoDetailScreen extends StatelessWidget {
         children: [
           Text(
             'Video Information',
-            style: GoogleFonts.figtree(
+            style: GoogleFonts.manrope(
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: AppTheme.textPrimary,
@@ -197,14 +197,14 @@ class VideoDetailScreen extends StatelessWidget {
         children: [
           Text(
             label,
-            style: GoogleFonts.figtree(
+            style: GoogleFonts.manrope(
               fontSize: 14,
               color: AppTheme.textSecondary,
             ),
           ),
           Text(
             value,
-            style: GoogleFonts.figtree(
+            style: GoogleFonts.manrope(
               fontSize: 14,
               fontWeight: FontWeight.w500,
               color: AppTheme.textPrimary,

@@ -99,7 +99,7 @@ class _UgcDashboardScreenState extends State<UgcDashboardScreen> with TickerProv
           SnackBar(
             content: Text(
               'Failed to load templates: $e',
-              style: GoogleFonts.figtree(),
+              style: GoogleFonts.manrope(),
             ),
             behavior: SnackBarBehavior.floating,
             backgroundColor: AppTheme.statusError,
@@ -167,7 +167,7 @@ class _UgcDashboardScreenState extends State<UgcDashboardScreen> with TickerProv
           vertical: AppTheme.spacingSm,
         ),
         decoration: BoxDecoration(
-          color: isSelected ? AppTheme.accentPrimary.withOpacity(0.1) : Colors.transparent,
+          color: isSelected ? Colors.black.withOpacity(0.1) : Colors.transparent,
           borderRadius: BorderRadius.circular(AppTheme.cardRadius),
         ),
         child: Column(
@@ -175,16 +175,16 @@ class _UgcDashboardScreenState extends State<UgcDashboardScreen> with TickerProv
           children: [
             Icon(
               icon,
-              color: isSelected ? AppTheme.accentPrimary : AppTheme.textSecondary,
+              color: isSelected ? Colors.black : AppTheme.textSecondary,
               size: AppTheme.bottomNavIconSize,
             ),
             const SizedBox(height: 4),
             Text(
               label,
-              style: GoogleFonts.figtree(
+              style: GoogleFonts.manrope(
                 fontSize: 12,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                color: isSelected ? AppTheme.accentPrimary : AppTheme.textSecondary,
+                color: isSelected ? Colors.black : AppTheme.textSecondary,
               ),
             ),
           ],
@@ -203,27 +203,41 @@ class _UgcDashboardScreenState extends State<UgcDashboardScreen> with TickerProv
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(AppTheme.sidePadding),
-                child: RichText(
-                  text: TextSpan(
-                    text: 'Welcome back, ',
-                    style: GoogleFonts.ebGaramond(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w600,
-                      color: AppTheme.textPrimary,
-                      letterSpacing: -0.5,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: _userName,
-                        style: GoogleFonts.ebGaramond(
+                child: Column(
+                  children: [
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text: 'Welcome back, ',
+                        style: GoogleFonts.manrope(
                           fontSize: 32,
                           fontWeight: FontWeight.w600,
                           color: AppTheme.textPrimary,
                           letterSpacing: -0.5,
                         ),
+                        children: [
+                          TextSpan(
+                            text: _userName,
+                            style: GoogleFonts.manrope(
+                              fontSize: 32,
+                              fontWeight: FontWeight.w700,
+                              color: AppTheme.textPrimary,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: AppTheme.spacingSm),
+                    Text(
+                      'Create amazing videos with AI',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.manrope(
+                        fontSize: 16,
+                        color: AppTheme.textSecondary,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -256,7 +270,7 @@ class _UgcDashboardScreenState extends State<UgcDashboardScreen> with TickerProv
                 padding: const EdgeInsets.symmetric(horizontal: AppTheme.sidePadding),
                 child: Text(
                   'Your Videos',
-                  style: GoogleFonts.figtree(
+                  style: GoogleFonts.manrope(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: AppTheme.textPrimary,
@@ -308,7 +322,7 @@ class _UgcDashboardScreenState extends State<UgcDashboardScreen> with TickerProv
           padding: const EdgeInsets.symmetric(vertical: AppTheme.spacingLg),
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [AppTheme.accentPrimary, AppTheme.accentHover],
+              colors: [Colors.black, Colors.black87],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -322,7 +336,7 @@ class _UgcDashboardScreenState extends State<UgcDashboardScreen> with TickerProv
               const SizedBox(width: AppTheme.spacingSm),
               Text(
                 'Create New UGC Video',
-                style: GoogleFonts.figtree(
+                style: GoogleFonts.manrope(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
@@ -435,7 +449,7 @@ class _UgcDashboardScreenState extends State<UgcDashboardScreen> with TickerProv
                             const SizedBox(height: AppTheme.spacingSm),
                             Text(
                               '${video.progress}%',
-                              style: GoogleFonts.figtree(
+                              style: GoogleFonts.manrope(
                                 color: Colors.white,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -476,7 +490,7 @@ class _UgcDashboardScreenState extends State<UgcDashboardScreen> with TickerProv
                 children: [
                   Text(
                     video.title,
-                    style: GoogleFonts.figtree(
+                    style: GoogleFonts.manrope(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: AppTheme.textPrimary,
@@ -489,7 +503,7 @@ class _UgcDashboardScreenState extends State<UgcDashboardScreen> with TickerProv
                       const SizedBox(width: AppTheme.spacingSm),
                       Text(
                         _formatDate(video.createdAt),
-                        style: GoogleFonts.figtree(
+                        style: GoogleFonts.manrope(
                           fontSize: 12,
                           color: AppTheme.textSecondary,
                         ),
@@ -544,7 +558,7 @@ class _UgcDashboardScreenState extends State<UgcDashboardScreen> with TickerProv
           const SizedBox(width: 4),
           Text(
             label,
-            style: GoogleFonts.figtree(
+            style: GoogleFonts.manrope(
               fontSize: 12,
               fontWeight: FontWeight.w500,
               color: color,
@@ -570,9 +584,9 @@ class _UgcDashboardScreenState extends State<UgcDashboardScreen> with TickerProv
             const SizedBox(height: AppTheme.spacingLg),
             Text(
               'No videos yet',
-              style: GoogleFonts.ebGaramond(
+              style: GoogleFonts.manrope(
                 fontSize: 24,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
                 color: AppTheme.textSecondary,
               ),
             ),
@@ -580,7 +594,7 @@ class _UgcDashboardScreenState extends State<UgcDashboardScreen> with TickerProv
             Text(
               'Tap the button above to create\nyour first UGC video',
               textAlign: TextAlign.center,
-              style: GoogleFonts.figtree(
+              style: GoogleFonts.manrope(
                 fontSize: 14,
                 color: AppTheme.textSecondary,
               ),

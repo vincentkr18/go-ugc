@@ -9,6 +9,7 @@ class ModelType {
   final String description;
   final IconData icon;
   final Color color;
+  final String? assetImage;
 
   ModelType({
     required this.id,
@@ -16,6 +17,7 @@ class ModelType {
     required this.description,
     required this.icon,
     required this.color,
+    this.assetImage,
   });
 }
 
@@ -33,30 +35,34 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
     ModelType(
       id: 'lip_sync',
       name: 'Lip Sync',
-      description: 'Sync character lips to audio track',
+      description: 'Sync audio to character',
       icon: Icons.record_voice_over_rounded,
       color: const Color(0xFFFF6B6B),
+      assetImage: 'assets/images/eve-jyg_kpdbp6M-unsplash.jpg',
     ),
     ModelType(
       id: 'sora2',
       name: 'Sora 2',
-      description: 'AI-powered video generation from text',
+      description: 'Text-to-video generation',
       icon: Icons.auto_awesome_rounded,
       color: const Color(0xFF4DABF7),
+      assetImage: 'assets/images/codioful-formerly-gradienta-T0oLW4bwkRU-unsplash.jpg',
     ),
     ModelType(
       id: 'kling',
       name: 'Kling',
-      description: 'Advanced character animation',
+      description: 'Product video creation',
       icon: Icons.animation_rounded,
       color: const Color(0xFF51CF66),
+      assetImage: 'assets/images/dirk-lach-W1RV39u5K5M-unsplash.jpg',
     ),
     ModelType(
       id: 'veo3',
       name: 'Veo 3',
-      description: 'Realistic product demonstrations',
+      description: 'Advanced video synthesis',
       icon: Icons.video_camera_back_rounded,
       color: const Color(0xFFFFA726),
+      assetImage: 'assets/images/mimo-FeNrGgQ1Tu8-unsplash.jpg',
     ),
   ];
 
@@ -66,12 +72,12 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
       backgroundColor: AppTheme.backgroundMain,
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           'Select Model',
-          style: GoogleFonts.figtree(
+          style: GoogleFonts.manrope(
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: AppTheme.textPrimary,
@@ -87,7 +93,7 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
                 children: [
                   Text(
                     'Choose Your Model',
-                    style: GoogleFonts.ebGaramond(
+                    style: GoogleFonts.manrope(
                       fontSize: 28,
                       fontWeight: FontWeight.w600,
                       color: AppTheme.textPrimary,
@@ -96,7 +102,7 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
                   const SizedBox(height: AppTheme.spacingSm),
                   Text(
                     'Select the AI model that best fits your creative needs',
-                    style: GoogleFonts.figtree(
+                    style: GoogleFonts.manrope(
                       fontSize: 14,
                       color: AppTheme.textSecondary,
                     ),
@@ -145,10 +151,7 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: _navigateToCreation,
-                      child: Text(
-                        'Continue',
-                        style: GoogleFonts.figtree(fontWeight: FontWeight.w600),
-                      ),
+                      child: const Text('Continue'),
                     ),
                   ),
                 ),
@@ -167,69 +170,66 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
       child: AnimatedContainer(
         duration: AppTheme.microDuration,
         margin: const EdgeInsets.only(bottom: AppTheme.spacingMd),
-        padding: const EdgeInsets.all(AppTheme.cardPadding),
         decoration: BoxDecoration(
-          color: isSelected ? AppTheme.cardHighlight : AppTheme.cardNeutral,
-          borderRadius: BorderRadius.circular(AppTheme.cardRadius),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? AppTheme.accentPrimary : Colors.transparent,
+            color: isSelected ? Colors.black : Colors.transparent,
             width: 2,
           ),
           boxShadow: isSelected ? AppTheme.elevatedShadow : AppTheme.cardShadow,
+          image: model.assetImage != null
+              ? DecorationImage(
+                  image: AssetImage(model.assetImage!),
+                  fit: BoxFit.cover,
+                )
+              : null,
         ),
-        child: Row(
-          children: [
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: model.color.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(AppTheme.cardRadiusSmall),
-              ),
-              child: Icon(
-                model.icon,
-                color: model.color,
-                size: 32,
-              ),
-            ),
-            const SizedBox(width: AppTheme.spacingMd),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    model.name,
-                    style: GoogleFonts.figtree(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: AppTheme.textPrimary,
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.white.withOpacity(0.85),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      model.name,
+                      style: GoogleFonts.spaceGrotesk(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black87,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    model.description,
-                    style: GoogleFonts.figtree(
-                      fontSize: 14,
-                      color: AppTheme.textSecondary,
+                    const SizedBox(height: 6),
+                    Text(
+                      model.description,
+                      style: GoogleFonts.manrope(
+                        fontSize: 15,
+                        color: Colors.black54,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            if (isSelected)
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: AppTheme.accentPrimary,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.check_rounded,
-                  color: Colors.white,
-                  size: 20,
+                  ],
                 ),
               ),
-          ],
+              if (isSelected)
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: Colors.black,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.check_rounded,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

@@ -88,73 +88,73 @@ class AppTheme {
   
   static TextTheme textTheme(BuildContext context) {
     return TextTheme(
-      // H1 - Garamond, Editorial, Large
-      displayLarge: GoogleFonts.ebGaramond(
+      // H1 - Manrope, Editorial, Large
+      displayLarge: GoogleFonts.manrope(
         fontSize: 28,
         fontWeight: FontWeight.w600,
         color: textPrimary,
         height: 1.3,
         letterSpacing: -0.5,
       ),
-      displayMedium: GoogleFonts.ebGaramond(
+      displayMedium: GoogleFonts.manrope(
         fontSize: 24,
         fontWeight: FontWeight.w600,
         color: textPrimary,
         height: 1.3,
       ),
       
-      // H2, H3 - Figtree, Clean
-      headlineLarge: GoogleFonts.figtree(
+      // H2, H3 - Manrope, Clean
+      headlineLarge: GoogleFonts.manrope(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: textPrimary,
         height: 1.4,
       ),
-      headlineMedium: GoogleFonts.figtree(
+      headlineMedium: GoogleFonts.manrope(
         fontSize: 18,
         fontWeight: FontWeight.w600,
         color: textPrimary,
         height: 1.4,
       ),
-      headlineSmall: GoogleFonts.figtree(
+      headlineSmall: GoogleFonts.manrope(
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: textPrimary,
         height: 1.4,
       ),
       
-      // Body - Figtree
-      bodyLarge: GoogleFonts.figtree(
+      // Body - Manrope
+      bodyLarge: GoogleFonts.manrope(
         fontSize: 16,
         fontWeight: FontWeight.normal,
         color: textPrimary,
         height: 1.5,
       ),
-      bodyMedium: GoogleFonts.figtree(
+      bodyMedium: GoogleFonts.manrope(
         fontSize: 14,
         fontWeight: FontWeight.normal,
         color: textPrimary,
         height: 1.5,
       ),
-      bodySmall: GoogleFonts.figtree(
+      bodySmall: GoogleFonts.manrope(
         fontSize: 12,
         fontWeight: FontWeight.normal,
         color: textSecondary,
         height: 1.5,
       ),
       
-      // Labels - Figtree
-      labelLarge: GoogleFonts.figtree(
+      // Labels - Manrope
+      labelLarge: GoogleFonts.manrope(
         fontSize: 14,
         fontWeight: FontWeight.w500,
         color: textPrimary,
       ),
-      labelMedium: GoogleFonts.figtree(
+      labelMedium: GoogleFonts.manrope(
         fontSize: 14,
         fontWeight: FontWeight.w500,
         color: textSecondary,
       ),
-      labelSmall: GoogleFonts.figtree(
+      labelSmall: GoogleFonts.manrope(
         fontSize: 12,
         fontWeight: FontWeight.w500,
         color: textSecondary,
@@ -187,8 +187,8 @@ class AppTheme {
         backgroundColor: backgroundMain,
         elevation: 0,
         centerTitle: false,
-        iconTheme: const IconThemeData(color: accentPrimary),
-        titleTextStyle: GoogleFonts.figtree(
+        iconTheme: const IconThemeData(color: Colors.black),
+        titleTextStyle: GoogleFonts.manrope(
           color: textPrimary,
           fontSize: 18,
           fontWeight: FontWeight.w600,
@@ -209,7 +209,7 @@ class AppTheme {
       // Elevated Button Theme
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: accentPrimary,
+          backgroundColor: Colors.black,
           foregroundColor: Colors.white,
           minimumSize: const Size(0, buttonHeight),
           padding: const EdgeInsets.symmetric(horizontal: spacingLg),
@@ -217,9 +217,9 @@ class AppTheme {
             borderRadius: BorderRadius.circular(cardRadius),
           ),
           elevation: 0,
-          textStyle: GoogleFonts.figtree(
+          textStyle: GoogleFonts.manrope(
             fontSize: 14,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -227,14 +227,14 @@ class AppTheme {
       // Outlined Button Theme
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: textPrimary,
+          foregroundColor: Colors.black,
           minimumSize: const Size(0, buttonHeight),
           padding: const EdgeInsets.symmetric(horizontal: spacingLg),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(cardRadius),
           ),
-          side: const BorderSide(color: borderLight, width: 1),
-          textStyle: GoogleFonts.figtree(
+          side: const BorderSide(color: Colors.black, width: 1),
+          textStyle: GoogleFonts.manrope(
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
@@ -247,7 +247,7 @@ class AppTheme {
           foregroundColor: accentPrimary,
           minimumSize: const Size(0, buttonHeight),
           padding: const EdgeInsets.symmetric(horizontal: spacingMd),
-          textStyle: GoogleFonts.figtree(
+          textStyle: GoogleFonts.manrope(
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
@@ -257,13 +257,13 @@ class AppTheme {
       // Bottom Navigation Bar Theme
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: backgroundSidebar,
-        selectedItemColor: accentPrimary,
+        selectedItemColor: Colors.black,
         unselectedItemColor: textSecondary,
-        selectedLabelStyle: GoogleFonts.figtree(
+        selectedLabelStyle: GoogleFonts.manrope(
           fontSize: 12,
           fontWeight: FontWeight.w500,
         ),
-        unselectedLabelStyle: GoogleFonts.figtree(
+        unselectedLabelStyle: GoogleFonts.manrope(
           fontSize: 12,
           fontWeight: FontWeight.normal,
         ),
@@ -295,7 +295,7 @@ class AppTheme {
           horizontal: spacingMd,
           vertical: spacingMd,
         ),
-        hintStyle: GoogleFonts.figtree(
+        hintStyle: GoogleFonts.manrope(
           fontSize: 14,
           color: textSecondary,
         ),
@@ -309,7 +309,7 @@ class AppTheme {
       
       // Floating Action Button
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: accentPrimary,
+        backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         elevation: 4,
         shape: RoundedRectangleBorder(
@@ -319,7 +319,7 @@ class AppTheme {
       
       // Progress Indicator Theme
       progressIndicatorTheme: const ProgressIndicatorThemeData(
-        color: accentPrimary,
+        color: Colors.black,
         linearTrackColor: borderLight,
         circularTrackColor: borderLight,
       ),
@@ -349,8 +349,8 @@ class AppTheme {
         backgroundColor: backgroundMainDark,
         elevation: 0,
         centerTitle: false,
-        iconTheme: const IconThemeData(color: accentPrimary),
-        titleTextStyle: GoogleFonts.figtree(
+        iconTheme: const IconThemeData(color: Colors.white),
+        titleTextStyle: GoogleFonts.manrope(
           color: textPrimaryDark,
           fontSize: 18,
           fontWeight: FontWeight.w600,
@@ -371,15 +371,15 @@ class AppTheme {
       // Elevated Button Theme
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: accentPrimary,
-          foregroundColor: Colors.white,
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
           minimumSize: const Size(0, buttonHeight),
           padding: const EdgeInsets.symmetric(horizontal: spacingLg),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(cardRadius),
           ),
           elevation: 0,
-          textStyle: GoogleFonts.figtree(
+          textStyle: GoogleFonts.manrope(
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
@@ -389,14 +389,14 @@ class AppTheme {
       // Outlined Button Theme
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: textPrimaryDark,
+          foregroundColor: Colors.white,
           minimumSize: const Size(0, buttonHeight),
           padding: const EdgeInsets.symmetric(horizontal: spacingLg),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(cardRadius),
           ),
-          side: const BorderSide(color: borderLightDark, width: 1),
-          textStyle: GoogleFonts.figtree(
+          side: const BorderSide(color: Colors.white, width: 1),
+          textStyle: GoogleFonts.manrope(
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
@@ -406,10 +406,10 @@ class AppTheme {
       // Text Button Theme
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: accentPrimary,
+          foregroundColor: Colors.white,
           minimumSize: const Size(0, buttonHeight),
           padding: const EdgeInsets.symmetric(horizontal: spacingMd),
-          textStyle: GoogleFonts.figtree(
+          textStyle: GoogleFonts.manrope(
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
@@ -419,13 +419,13 @@ class AppTheme {
       // Bottom Navigation Bar Theme
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: backgroundSidebarDark,
-        selectedItemColor: accentPrimary,
+        selectedItemColor: Colors.white,
         unselectedItemColor: textSecondaryDark,
-        selectedLabelStyle: GoogleFonts.figtree(
+        selectedLabelStyle: GoogleFonts.manrope(
           fontSize: 12,
           fontWeight: FontWeight.w500,
         ),
-        unselectedLabelStyle: GoogleFonts.figtree(
+        unselectedLabelStyle: GoogleFonts.manrope(
           fontSize: 12,
           fontWeight: FontWeight.normal,
         ),
@@ -457,7 +457,7 @@ class AppTheme {
           horizontal: spacingMd,
           vertical: spacingMd,
         ),
-        hintStyle: GoogleFonts.figtree(
+        hintStyle: GoogleFonts.manrope(
           fontSize: 14,
           color: textSecondaryDark,
         ),
@@ -471,8 +471,8 @@ class AppTheme {
       
       // Floating Action Button
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: accentPrimary,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
@@ -481,7 +481,7 @@ class AppTheme {
       
       // Progress Indicator Theme
       progressIndicatorTheme: const ProgressIndicatorThemeData(
-        color: accentPrimary,
+        color: Colors.white,
         linearTrackColor: borderLightDark,
         circularTrackColor: borderLightDark,
       ),
@@ -490,73 +490,73 @@ class AppTheme {
 
   static TextTheme _darkTextTheme(BuildContext context) {
     return TextTheme(
-      // H1 - Garamond, Editorial, Large
-      displayLarge: GoogleFonts.ebGaramond(
+      // H1 - Manrope, Editorial, Large
+      displayLarge: GoogleFonts.manrope(
         fontSize: 28,
         fontWeight: FontWeight.w600,
         color: textPrimaryDark,
         height: 1.3,
         letterSpacing: -0.5,
       ),
-      displayMedium: GoogleFonts.ebGaramond(
+      displayMedium: GoogleFonts.manrope(
         fontSize: 24,
         fontWeight: FontWeight.w600,
         color: textPrimaryDark,
         height: 1.3,
       ),
       
-      // H2, H3 - Figtree, Clean
-      headlineLarge: GoogleFonts.figtree(
+      // H2, H3 - Manrope, Clean
+      headlineLarge: GoogleFonts.manrope(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: textPrimaryDark,
         height: 1.4,
       ),
-      headlineMedium: GoogleFonts.figtree(
+      headlineMedium: GoogleFonts.manrope(
         fontSize: 18,
         fontWeight: FontWeight.w600,
         color: textPrimaryDark,
         height: 1.4,
       ),
-      headlineSmall: GoogleFonts.figtree(
+      headlineSmall: GoogleFonts.manrope(
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: textPrimaryDark,
         height: 1.4,
       ),
       
-      // Body - Figtree
-      bodyLarge: GoogleFonts.figtree(
+      // Body - Manrope
+      bodyLarge: GoogleFonts.manrope(
         fontSize: 16,
         fontWeight: FontWeight.normal,
         color: textPrimaryDark,
         height: 1.5,
       ),
-      bodyMedium: GoogleFonts.figtree(
+      bodyMedium: GoogleFonts.manrope(
         fontSize: 14,
         fontWeight: FontWeight.normal,
         color: textPrimaryDark,
         height: 1.5,
       ),
-      bodySmall: GoogleFonts.figtree(
+      bodySmall: GoogleFonts.manrope(
         fontSize: 12,
         fontWeight: FontWeight.normal,
         color: textSecondaryDark,
         height: 1.5,
       ),
       
-      // Labels - Figtree
-      labelLarge: GoogleFonts.figtree(
+      // Labels - Manrope
+      labelLarge: GoogleFonts.manrope(
         fontSize: 14,
         fontWeight: FontWeight.w500,
         color: textPrimaryDark,
       ),
-      labelMedium: GoogleFonts.figtree(
+      labelMedium: GoogleFonts.manrope(
         fontSize: 14,
         fontWeight: FontWeight.w500,
         color: textSecondaryDark,
       ),
-      labelSmall: GoogleFonts.figtree(
+      labelSmall: GoogleFonts.manrope(
         fontSize: 12,
         fontWeight: FontWeight.w500,
         color: textSecondaryDark,

@@ -102,7 +102,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
         ),
         title: Text(
           'Select Template',
-          style: GoogleFonts.figtree(
+          style: GoogleFonts.manrope(
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: AppTheme.textPrimary,
@@ -138,9 +138,9 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
             const SizedBox(height: AppTheme.spacingLg),
             Text(
               'Failed to Load Templates',
-              style: GoogleFonts.ebGaramond(
+              style: GoogleFonts.manrope(
                 fontSize: 24,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
                 color: AppTheme.textPrimary,
               ),
             ),
@@ -148,7 +148,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
             Text(
               _errorMessage ?? 'Unknown error',
               textAlign: TextAlign.center,
-              style: GoogleFonts.figtree(
+              style: GoogleFonts.manrope(
                 fontSize: 14,
                 color: AppTheme.textSecondary,
               ),
@@ -158,7 +158,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
               onPressed: _loadTemplates,
               child: Text(
                 'Retry',
-                style: GoogleFonts.figtree(fontWeight: FontWeight.w600),
+                style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
               ),
             ),
           ],
@@ -179,7 +179,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
             onChanged: (_) => _applyFilters(),
             decoration: InputDecoration(
               hintText: 'Search templates...',
-              hintStyle: GoogleFonts.figtree(
+              hintStyle: GoogleFonts.manrope(
                 fontSize: 14,
                 color: AppTheme.textSecondary.withOpacity(0.6),
               ),
@@ -214,7 +214,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
                   child: FilterChip(
                     label: Text(
                       filter,
-                      style: GoogleFonts.figtree(
+                      style: GoogleFonts.manrope(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: isSelected
@@ -230,11 +230,11 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
                       });
                     },
                     backgroundColor: AppTheme.cardNeutral,
-                    selectedColor: AppTheme.accentPrimary,
+                    selectedColor: Colors.black,
                     checkmarkColor: Colors.white,
                     side: BorderSide(
                       color: isSelected
-                          ? AppTheme.accentPrimary
+                          ? Colors.black
                           : AppTheme.borderLight,
                     ),
                     padding: const EdgeInsets.symmetric(
@@ -255,7 +255,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
           ),
           child: Text(
             '${_filteredTemplates.length} templates available',
-            style: GoogleFonts.figtree(
+            style: GoogleFonts.manrope(
               fontSize: 13,
               color: AppTheme.textSecondary,
             ),
@@ -305,7 +305,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
                 },
                 child: Text(
                   'Select Template',
-                  style: GoogleFonts.figtree(fontWeight: FontWeight.w600),
+                  style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -327,16 +327,16 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
           const SizedBox(height: AppTheme.spacingLg),
           Text(
             'No Templates Found',
-            style: GoogleFonts.ebGaramond(
+            style: GoogleFonts.manrope(
               fontSize: 20,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
               color: AppTheme.textPrimary,
             ),
           ),
           const SizedBox(height: AppTheme.spacingSm),
           Text(
             'Try adjusting your filters',
-            style: GoogleFonts.figtree(
+            style: GoogleFonts.manrope(
               fontSize: 14,
               color: AppTheme.textSecondary,
             ),
@@ -379,14 +379,14 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
                   borderRadius: BorderRadius.circular(AppTheme.cardRadius),
                   border: Border.all(
                     color: isSelected
-                        ? AppTheme.accentPrimary
+                        ? Colors.black
                         : AppTheme.borderLight,
                     width: isSelected ? 3 : 2,
                   ),
                   boxShadow: isSelected
                       ? [
                           BoxShadow(
-                            color: AppTheme.accentPrimary.withOpacity(0.3),
+                            color: Colors.black.withOpacity(0.3),
                             blurRadius: 8,
                             spreadRadius: 2,
                           ),
@@ -403,16 +403,16 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
                         imageUrl: template.thumbnailUrl,
                         fit: BoxFit.cover,
                         placeholder: (context, url) => Container(
-                          color: AppTheme.accentPrimary.withOpacity(0.1),
+                          color: Colors.black.withOpacity(0.1),
                           child: const Center(
                             child: CircularProgressIndicator(),
                           ),
                         ),
                         errorWidget: (context, url, error) => Container(
-                          color: AppTheme.accentPrimary.withOpacity(0.1),
+                          color: Colors.black.withOpacity(0.1),
                           child: Icon(
                             Icons.video_library_rounded,
-                            color: AppTheme.accentPrimary,
+                            color: Colors.black,
                             size: 40,
                           ),
                         ),
@@ -430,7 +430,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
-                              color: AppTheme.accentPrimary,
+                              color: Colors.black,
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
@@ -459,7 +459,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
               template.title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.figtree(
+              style: GoogleFonts.manrope(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
                 color: AppTheme.textPrimary,
@@ -480,15 +480,15 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
                       vertical: 2,
                     ),
                     decoration: BoxDecoration(
-                      color: AppTheme.accentPrimary.withOpacity(0.1),
+                      color: Colors.black.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
                       tag.name,
-                      style: GoogleFonts.figtree(
+                      style: GoogleFonts.manrope(
                         fontSize: 10,
                         fontWeight: FontWeight.w500,
-                        color: AppTheme.accentPrimary,
+                        color: Colors.black,
                       ),
                     ),
                   );
@@ -587,7 +587,7 @@ class _VideoPreviewModalState extends State<_VideoPreviewModal> {
               ),
               child: Text(
                 widget.template.title,
-                style: GoogleFonts.figtree(
+                style: GoogleFonts.manrope(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
@@ -631,7 +631,7 @@ class _VideoPreviewModalState extends State<_VideoPreviewModal> {
                               const SizedBox(height: 16),
                               Text(
                                 'Failed to load preview',
-                                style: GoogleFonts.figtree(
+                                style: GoogleFonts.manrope(
                                   fontSize: 14,
                                   color: AppTheme.textSecondary,
                                 ),
@@ -682,7 +682,7 @@ class _VideoPreviewModalState extends State<_VideoPreviewModal> {
                   const SizedBox(width: 8),
                   Text(
                     'Tap anywhere to close',
-                    style: GoogleFonts.figtree(
+                    style: GoogleFonts.manrope(
                       fontSize: 14,
                       color: Colors.white70,
                     ),
