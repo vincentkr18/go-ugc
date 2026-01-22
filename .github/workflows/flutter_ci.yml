@@ -79,23 +79,31 @@ jobs:
           echo "org.gradle.configureondemand=true" >> android/gradle.properties
 
       # 🔟 Build APK
-      - name: Build APK
-        run: flutter build apk --release --target-platform=android-arm64
-
+      # - name: Build APK
+      #   run: flutter build apk --release --target-platform=android-arm64
+      
+      - name: Build AAB
+        run: flutter build appbundle --release
       # 1️⃣1️⃣ Upload artifact
       # - uses: actions/upload-artifact@v4
       #   with:
       #     name: android-apk
       #     path: build/app/outputs/flutter-apk/app-release.apk
       
-      - name: Verify APK exists
-        run: find build -name "*.apk"
+      # - name: Verify APK exists
+      #   run: find build -name "*.apk"
+
+      - name: Verify AAB exists
+        run: find build -name "*.aab"
 
       
       - uses: actions/upload-artifact@v4
         with:
-          name: android-apk
-          path: build/app/outputs/flutter-apk/
+          #name: android-apk
+          name: android-aab
+          #path: build/app/outputs/flutter-apk/
+          path: build/app/outputs/bundle/release/app-release.aab
+
 
   ios:
     name: Build iOS IPA
