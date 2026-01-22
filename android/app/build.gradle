@@ -12,7 +12,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace =  "com.gougc.admaker"
+    namespace =  "com.genugc.admaker"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -26,7 +26,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.gougc.admaker"
+        applicationId = "com.genugc.admaker"
         // Minimum SDK version set to 21 for Google Sign-In compatibility
         minSdkVersion = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion

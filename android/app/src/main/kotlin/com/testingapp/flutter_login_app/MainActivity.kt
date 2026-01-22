@@ -1,4 +1,4 @@
-package com.gougc.admaker
+package com.genugc.admaker
 
 import io.flutter.embedding.android.FlutterActivity
 

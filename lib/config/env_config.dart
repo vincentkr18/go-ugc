@@ -37,8 +37,8 @@ class EnvConfig {
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // These must match your OAuth client bundle ID / package name
   
-  static const String androidPackageName = 'com.gougc.admaker';
-  static const String iosBundleId = 'com.gougc.admaker';
+  static const String androidPackageName = 'com.genugc.admaker';
+  static const String iosBundleId = 'com.genugc.admaker';
   
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // 🔧 COMPUTED VALUES (DO NOT EDIT)
